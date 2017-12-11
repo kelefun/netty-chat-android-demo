@@ -1,0 +1,6 @@
+syntax = "proto3";
+option java_package = "com.funstill.netty.chat.protobuf";
+enum code {
+    SUCCESS = 0;
+    UNKOWN_ERROR = 1;
+}

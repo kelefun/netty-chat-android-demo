@@ -1,0 +1,15 @@
+syntax = "proto3";
+option java_package = "com.funstill.netty.chat.protobuf";
+message Body {
+    /**
+     *消息类型(1文字,2图片,3音频,4视频,5
+     */
+    uint32 msgType = 1;
+    uint32 sender = 2;
+    uint32 receiver = 3;
+    /**
+     *消息内容
+     */
+    string content = 4;
+
+}
