@@ -28,8 +28,8 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ProtoMsg.Message pm = (ProtoMsg.Message) msg;
-        System.out.println("客户端接收消息" + pm.getHeader().toString());
+        ProtoMsg.Content pm = (ProtoMsg.Content) msg;
+        System.out.println("客户端接收消息" + pm.getContent().toString());
     }
 
     @Override
@@ -61,15 +61,11 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     public static void sendMsg(String msgStr) {
-        ProtoMsg.Header.Builder headerBuilder = ProtoMsg.Header.newBuilder();
-        headerBuilder.setLength(999);
-        headerBuilder.setProtoType(1);
-        CommonMsg.Body.Builder body = CommonMsg.Body.newBuilder();
+        CommonMsg.Content.Builder body = CommonMsg.Content.newBuilder();
         body.setContent(msgStr);
-        ProtoMsg.Message.Builder msgBuilder = ProtoMsg.Message.newBuilder();
-        msgBuilder.setHeader(headerBuilder);
-        msgBuilder.setBody(body.build().toByteString());
+        ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
+        msgBuilder.setProtoType(1);
+        msgBuilder.setContent(body.build().toByteString());
         channel.writeAndFlush(msgBuilder.build());
     }
-
 }

@@ -1,1 +1,1 @@
-protoc --proto_path=D:\IdeaWorkspace\netty-tcp-protobuf-chat\src\main\java\com\funstill\netty\chat\protobuf  --java_out=D:\IdeaWorkspace\netty-tcp-protobuf-chat\src\main\java CommonMsg.proto
+protoc --proto_path=D:\IdeaWorkspace\netty-tcp-protobuf-chat\src\main\java\com\funstill\netty\chat\protobuf  --java_out=D:\IdeaWorkspace\netty-tcp-protobuf-chat\src\main\java ProtoMsg.proto

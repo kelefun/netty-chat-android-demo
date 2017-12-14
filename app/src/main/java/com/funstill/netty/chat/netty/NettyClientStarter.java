@@ -37,7 +37,7 @@ public class NettyClientStarter {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
                             ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
-                            ch.pipeline().addLast(new ProtobufDecoder(ProtoMsg.Message.getDefaultInstance()));
+                            ch.pipeline().addLast(new ProtobufDecoder(ProtoMsg.Content.getDefaultInstance()));
                             ch.pipeline().addLast(new ProtobufEncoder());
                             ch.pipeline().addLast(new NettyClientHandler());
                         }
@@ -54,7 +54,6 @@ public class NettyClientStarter {
         } catch (Exception e) {
             Log.e("netty连接异常", e.toString());
             e.printStackTrace();
-            ;
         }
 
     }

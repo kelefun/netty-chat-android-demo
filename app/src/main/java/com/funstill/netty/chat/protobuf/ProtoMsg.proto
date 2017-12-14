@@ -3,16 +3,8 @@ syntax = "proto3";
 //import "Header.proto";
 option java_package = "com.funstill.netty.chat.protobuf";
 
-message Header {
+message Content {
     string uuid = 1;
-    uint32 length = 2;
-    /**
-     *消息协议类型(心跳包,登录,消息等)
-     */
     uint32 protoType = 3;
-}
-
-message Message {
-    Header header = 1;
-    bytes body = 2;
+    bytes content = 2;
 }
