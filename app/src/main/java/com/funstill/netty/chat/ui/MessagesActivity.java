@@ -91,9 +91,10 @@ public abstract class MessagesActivity extends AppCompatActivity
 
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
-        if (totalItemsCount < TOTAL_MESSAGES_COUNT) {
-            loadMessages();
-        }
+        //TODO 加载历史消息
+//        if (totalItemsCount < TOTAL_MESSAGES_COUNT) {
+//            loadMessages();
+//        }
     }
 
     @Override

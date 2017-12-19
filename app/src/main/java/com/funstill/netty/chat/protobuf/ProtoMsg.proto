@@ -5,6 +5,9 @@ option java_package = "com.funstill.netty.chat.protobuf";
 
 message Content {
     string uuid = 1;
+    /**
+     * 1普通消息,2登录请求,3登录响应
+     */
     uint32 protoType = 3;
     bytes content = 2;
 }

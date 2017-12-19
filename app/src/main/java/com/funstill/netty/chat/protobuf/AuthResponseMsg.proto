@@ -1,0 +1,8 @@
+syntax = "proto3";
+option java_package = "com.funstill.netty.chat.protobuf";
+message Content {
+    int32 code = 1;
+    string msg = 2;
+    string userId = 3;
+    string extra=4;
+}

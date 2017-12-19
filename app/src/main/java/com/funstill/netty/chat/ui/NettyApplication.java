@@ -16,7 +16,7 @@ public class NettyApplication extends Application {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                new NettyClientStarter().connect(8089, "192.168.1.84");
+                new NettyClientStarter().connect(8089, "192.168.1.83");
             }
         }).start();
 

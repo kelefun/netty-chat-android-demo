@@ -20,32 +20,33 @@ import android.widget.Toast;
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.config.ClientType;
 import com.funstill.netty.chat.config.Const;
+import com.funstill.netty.chat.model.ProtoTypeEnum;
+import com.funstill.netty.chat.model.ResponseEnum;
+import com.funstill.netty.chat.netty.NettyClientHandler;
+import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.permission.MPermission;
 import com.funstill.netty.chat.permission.annotation.OnMPermissionDenied;
 import com.funstill.netty.chat.permission.annotation.OnMPermissionNeverAskAgain;
+import com.funstill.netty.chat.protobuf.AuthMsg;
+import com.funstill.netty.chat.protobuf.AuthResponseMsg;
+import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.funstill.netty.chat.widget.ClearWriteEditText;
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import io.netty.channel.Channel;
 
 
 public class LoginActivity extends FragmentActivity {
 
     private static final String KICK_OUT = "KICK_OUT";
     private final int BASIC_PERMISSION_REQUEST_CODE = 110;
-
-    private final static String TAG = "LoginActivity";
-    private static final int LOGIN = 5;
-    private static final int GET_TOKEN = 6;
-    private static final int SYNC_USER_INFO = 9;
+    private ProtoMsgObserver loginObserver = null;
 
     private ImageView mImg_Background;
     private ClearWriteEditText mPhoneEdit, mPasswordEdit;
-    private String phoneString;
-    private String passwordString;
-    private String connectResultId;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private String loginToken;
-
 
     public static void start(Context context) {
         start(context, false);
@@ -58,18 +59,6 @@ public class LoginActivity extends FragmentActivity {
         context.startActivity(intent);
     }
 
-    private class StarterThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-//            new NettyClientStarter().connect(8089, "192.168.1.84");
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +67,42 @@ public class LoginActivity extends FragmentActivity {
         editor = sp.edit();
         requestBasicPermission();
         initView();
+        initObserver();
     }
 
+    private void initObserver(){
+        if(loginObserver==null){
+            loginObserver=new ProtoMsgObserver() {
+                @Override
+                public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
+                    if(msg.getProtoType()== ProtoTypeEnum.LOGIN_RES_MSG.getIndex()){//登录响应信息
+                        AuthResponseMsg.Content res;
+                        try {
+                            res=AuthResponseMsg.Content.parseFrom(msg.getContent());
+                            if(res.getCode()== ResponseEnum.SUCCESS.getCode()){
+                                editor.putString("username",mPhoneEdit.getText().toString());
+                                editor.putString("userId",res.getUserId());
+                                DefaultMessagesActivity.senderId = res.getUserId();
+                                DefaultMessagesActivity.open(getApplicationContext());
+                            }else {
+                                AppUtils.showToast(getApplicationContext(),res.getMsg(),false);
+                            }
+                        } catch (InvalidProtocolBufferException e) {
+                            e.printStackTrace();
+                            AppUtils.showToast(getApplicationContext(),"登录失败",false);
+                        }
+                    }
+                }
+            };
+        }
+        NettyClientHandler.msgObservable.addObserver(loginObserver);
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        NettyClientHandler.msgObservable.deleteObserver(loginObserver);
+
+    }
     private void initView() {
         mPhoneEdit = (ClearWriteEditText) findViewById(R.id.de_login_phone);
         mPasswordEdit = (ClearWriteEditText) findViewById(R.id.de_login_password);
@@ -87,9 +110,15 @@ public class LoginActivity extends FragmentActivity {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DefaultMessagesActivity.senderId = "66";
-                //TODO 登录
-                DefaultMessagesActivity.open(getApplicationContext());
+                //TODO 检测登录信息是否为空
+                //发送登录消息
+                AuthMsg.Content.Builder authBuilder = AuthMsg.Content.newBuilder();
+                authBuilder.setUsername(mPhoneEdit.getText().toString());
+                authBuilder.setPassword(mPasswordEdit.getText().toString());
+                ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
+                msgBuilder.setProtoType(2);
+                msgBuilder.setContent(authBuilder.build().toByteString());
+                NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
             }
         });
         mImg_Background = (ImageView) findViewById(R.id.de_img_backgroud);
@@ -126,20 +155,6 @@ public class LoginActivity extends FragmentActivity {
             mPhoneEdit.setText(oldPhone);
             mPasswordEdit.setText(oldPassword);
         }
-
-//        if (getIntent().getBooleanExtra("kickedByOtherClient", false)) {
-//            final AlertDialog dlg = new AlertDialog.Builder(LoginActivity.this).create();
-//            dlg.show();
-//            Window window = dlg.getWindow();
-//            window.setContentView(R.layout.other_devices);
-//            TextView text = (TextView) window.findViewById(R.id.ok);
-//            text.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dlg.cancel();
-//                }
-//            });
-//        }
     }
 
     /**

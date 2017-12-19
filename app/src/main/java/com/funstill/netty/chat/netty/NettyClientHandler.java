@@ -3,6 +3,8 @@ package com.funstill.netty.chat.netty;
 import android.os.Build;
 import android.util.Log;
 
+import com.funstill.netty.chat.observer.ProtoMsgObservable;
+import com.funstill.netty.chat.observer.ProtoMsgObserverImpl;
 import com.funstill.netty.chat.protobuf.CommonMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 
@@ -19,7 +21,10 @@ import io.netty.handler.timeout.IdleStateEvent;
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public static Channel channel;
     public final String TAG="netty";
-
+    public static ProtoMsgObservable msgObservable=new ProtoMsgObservable();
+    static {
+        msgObservable.addObserver(new ProtoMsgObserverImpl());
+    }
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         channel = ctx.channel();
@@ -28,8 +33,9 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ProtoMsg.Content pm = (ProtoMsg.Content) msg;
-        System.out.println("客户端接收消息" + pm.getContent().toString());
+        msgObservable.handleMsg(ctx.channel(),(ProtoMsg.Content)msg);//相当于observer 的 update
+//        ProtoMsg.Content pm = (ProtoMsg.Content) msg;
+//        System.out.println("客户端接收消息" + pm.getContent().toString());
     }
 
     @Override
