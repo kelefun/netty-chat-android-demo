@@ -80,10 +80,12 @@ public class LoginActivity extends FragmentActivity {
                         try {
                             res=AuthResponseMsg.Content.parseFrom(msg.getContent());
                             if(res.getCode()== ResponseEnum.SUCCESS.getCode()){
-                                editor.putString("username",mPhoneEdit.getText().toString());
-                                editor.putString("userId",res.getUserId());
+                                editor.putString(Const.LOGING_USERNAME,mPhoneEdit.getText().toString());
+                                editor.putString(Const.LOGIN_USER_ID,res.getUserId());
+                                editor.commit();
                                 DefaultMessagesActivity.senderId = res.getUserId();
                                 DefaultMessagesActivity.open(getApplicationContext());
+                                finish();//结束此页面
                             }else {
                                 AppUtils.showToast(getApplicationContext(),res.getMsg(),false);
                             }
@@ -116,9 +118,11 @@ public class LoginActivity extends FragmentActivity {
                 authBuilder.setUsername(mPhoneEdit.getText().toString());
                 authBuilder.setPassword(mPasswordEdit.getText().toString());
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
-                msgBuilder.setProtoType(2);
+                msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_MSG.getIndex());
                 msgBuilder.setContent(authBuilder.build().toByteString());
-                NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
+                if(NettyClientHandler.channel.isActive()){
+                    NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
+                }
             }
         });
         mImg_Background = (ImageView) findViewById(R.id.de_img_backgroud);
@@ -148,8 +152,8 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        String oldPhone = sp.getString(Const.SEALTALK_LOGING_PHONE, "");
-        String oldPassword = sp.getString(Const.SEALTALK_LOGING_PASSWORD, "");
+        String oldPhone = sp.getString(Const.LOGING_USERNAME, "");
+        String oldPassword = sp.getString(Const.LOGING_PASSWORD, "");
 
         if (!TextUtils.isEmpty(oldPhone) && !TextUtils.isEmpty(oldPassword)) {
             mPhoneEdit.setText(oldPhone);

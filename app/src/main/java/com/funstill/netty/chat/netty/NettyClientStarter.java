@@ -48,7 +48,7 @@ public class NettyClientStarter {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
                     future.isSuccess();
-                    Log.e("future连接状态=", future.isSuccess() + "");
+                    Log.i("NettyClientStarter/future连接状态=", future.isSuccess() + "");
                 }
             });
         } catch (Exception e) {

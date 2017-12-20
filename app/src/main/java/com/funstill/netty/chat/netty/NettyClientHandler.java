@@ -28,7 +28,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         channel = ctx.channel();
-        sendMsg("Android客户端连接,设备SERIAL=" + Build.MODEL + Build.SERIAL);
+        sendMsg("Android客户端连接,设备=" + Build.MODEL+",SERIAL=" + Build.SERIAL);
     }
 
     @Override
