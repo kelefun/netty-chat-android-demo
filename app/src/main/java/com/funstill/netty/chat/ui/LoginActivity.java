@@ -153,11 +153,9 @@ public class LoginActivity extends FragmentActivity {
         });
 
         String oldPhone = sp.getString(Const.LOGING_USERNAME, "");
-        String oldPassword = sp.getString(Const.LOGING_PASSWORD, "");
 
-        if (!TextUtils.isEmpty(oldPhone) && !TextUtils.isEmpty(oldPassword)) {
+        if (!TextUtils.isEmpty(oldPhone)) {
             mPhoneEdit.setText(oldPhone);
-            mPasswordEdit.setText(oldPassword);
         }
     }
 
