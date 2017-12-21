@@ -120,9 +120,10 @@ public class LoginActivity extends FragmentActivity {
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
                 msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_MSG.getIndex());
                 msgBuilder.setContent(authBuilder.build().toByteString());
-                if(NettyClientHandler.channel.isActive()){
+                if(NettyClientHandler.channel!=null&&NettyClientHandler.channel.isActive()){
                     NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
                 }
+                CustomLayoutDialogsActivity.open(LoginActivity.this);
             }
         });
         mImg_Background = (ImageView) findViewById(R.id.de_img_backgroud);
