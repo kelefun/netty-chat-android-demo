@@ -13,7 +13,7 @@
         app:dialogMessageTextSize="14sp"
         app:dialogTitleTextStyle="bold"
         app:dialogUnreadBubbleBackgroundColor="@color/colorAccent"
-        app:dialogUnreadItemBackground="@color/rc_conversation_top_bg"
+        app:dialogUnreadItemBackground="@color/rc_input_bg"
         app:dialogUnreadTitleTextStyle="bold"/>
 
 </RelativeLayout>
