@@ -30,6 +30,13 @@ public class FriendActivity extends AppCompatActivity {
         context.startActivity(new Intent(context, FriendActivity.class));
     }
     private String[] text = new String[]{
+            "面对大河我无限惭愧",
+            "我年华虚度 空有一身疲倦",
+            "和所有以梦为马的诗人一样",
+            "岁月易逝 一滴不剩",
+            "我不得不和烈士和小丑走在同一道路上",
+            "万人都要将火熄灭",
+            "我一人独将此火高高举起",
             "他什么都没有留下来",
             "随着海水的颠簸",
             "去往未知的地域",
@@ -86,11 +93,6 @@ public class FriendActivity extends AppCompatActivity {
 
         public MyAdapter(Context ctx, List<ChatFriend> l) {
             super(ctx, l);
-        }
-
-        @Override
-        protected void delete(int position) {
-            adapter.removeData(position);
         }
 
         @Override

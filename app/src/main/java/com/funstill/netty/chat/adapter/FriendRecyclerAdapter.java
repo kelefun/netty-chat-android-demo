@@ -86,10 +86,6 @@ public abstract class FriendRecyclerAdapter<T> extends RecyclerView.Adapter<Frie
         holder.desc.setText(t.getDesc());
     }
 
-
-    //删除
-    protected abstract void delete(int position);
-
     //添加
     protected abstract void add(int position);
 
