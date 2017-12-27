@@ -1,8 +1,22 @@
+
+buildscript {
+    dependencies {
+//        classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
+    }
+}
+
 apply plugin: 'com.android.application'
 
+dependencies {
+//    debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectboxVersion"
+//    releaseImplementation "io.objectbox:objectbox-android:$objectboxVersion"
+}
+
+//apply plugin: 'io.objectbox'
 android {
     compileSdkVersion 26
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.funstill.nettydemo"
         minSdkVersion 25
         targetSdkVersion 26
@@ -23,11 +37,15 @@ ext {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:cardview-v7:$supportVersion"
+    implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
+    compile 'com.android.support:multidex:1.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'io.netty:netty-all:4.1.17.Final'
     implementation 'com.google.protobuf:protobuf-java:3.5.0'
-    compile "de.hdodenhof:circleimageview:2.2.0"
+    implementation 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+    implementation "de.hdodenhof:circleimageview:2.2.0"
     implementation ('com.github.bumptech.glide:glide:4.4.0'){
         exclude group: 'com.android.support'
     }
@@ -35,7 +53,6 @@ dependencies {
         exclude group: 'com.android.support'
     }
     testImplementation 'junit:junit:4.12'
-
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

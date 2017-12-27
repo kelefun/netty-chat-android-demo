@@ -1,7 +1,7 @@
 package com.funstill.netty.chat.fixtures;
 
 
-import com.funstill.netty.chat.model.Message;
+import com.funstill.netty.chat.model.chat.ChatMessage;
 import com.funstill.netty.chat.model.User;
 
 import java.util.ArrayList;
@@ -16,35 +16,35 @@ public final class MessagesFixtures extends FixturesData {
         throw new AssertionError();
     }
 
-    public static Message getImageMessage() {
-        Message message = new Message(getRandomId(), getUser(), null);
-        message.setImage(new Message.Image(getRandomImage()));
+    public static ChatMessage getImageMessage() {
+        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null);
+        message.setImage(new ChatMessage.Image(getRandomImage()));
         return message;
     }
 
-    public static Message getVoiceMessage() {
-        Message message = new Message(getRandomId(), getUser(), null);
-        message.setVoice(new Message.Voice("http://example.com", rnd.nextInt(200) + 30));
+    public static ChatMessage getVoiceMessage() {
+        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null);
+        message.setVoice(new ChatMessage.Voice("http://example.com", rnd.nextInt(200) + 30));
         return message;
     }
 
-    public static Message getTextMessage() {
+    public static ChatMessage getTextMessage() {
         return getTextMessage(getRandomMessage());
     }
 
-    public static Message getTextMessage(String text) {
+    public static ChatMessage getTextMessage(String text) {
         User user=getUser();
         user.setId("0");
-        return new Message(getRandomId(), user, text);
+        return new ChatMessage(getRandomId(), user, text);
     }
 
-    public static ArrayList<Message> getMessages(Date startDate) {
-        ArrayList<Message> messages = new ArrayList<>();
+    public static ArrayList<ChatMessage> getMessages(Date startDate) {
+        ArrayList<ChatMessage> messages = new ArrayList<>();
         for (int i = 0; i < 3/*days count*/; i++) {
             int countPerDay = rnd.nextInt(5) + 1;
 
             for (int j = 0; j < countPerDay; j++) {
-                Message message;
+                ChatMessage message;
                 if (i % 2 == 0 && j % 3 == 0) {
                     message = getImageMessage();
                 } else {

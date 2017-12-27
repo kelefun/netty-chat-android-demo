@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.fixtures.MessagesFixtures;
-import com.funstill.netty.chat.model.Message;
-import com.funstill.netty.chat.model.ProtoTypeEnum;
+import com.funstill.netty.chat.model.chat.ChatMessage;
+import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
 import com.funstill.netty.chat.model.User;
 import com.funstill.netty.chat.netty.NettyClientHandler;
 import com.funstill.netty.chat.observer.ProtoMsgObserver;
@@ -53,7 +53,7 @@ public class DefaultMessagesActivity extends MessagesActivity
                             res=CommonMsg.Content.parseFrom(msg.getContent());
                             if(res.getMsgType()==1){
                                 User user=new User(res.getSender()+"",res.getSender()+"","http://i.imgur.com/pv1tBmT.png",true);
-                                Message chatKitMsg=new Message(msg.getUuid(),user , res.getContent());
+                                ChatMessage chatKitMsg=new ChatMessage(msg.getUuid(),user , res.getContent());
                                 messagesAdapter.addToStart(chatKitMsg,true);
                             }
                         } catch (InvalidProtocolBufferException e) {
@@ -67,16 +67,15 @@ public class DefaultMessagesActivity extends MessagesActivity
     }
     @Override
     public boolean onSubmit(CharSequence input) {
-        Message msg = MessagesFixtures.getTextMessage(input.toString());
+        ChatMessage msg = MessagesFixtures.getTextMessage(input.toString());
         super.messagesAdapter.addToStart(msg, true);
-        NettyClientHandler.sendMsg(input.toString());
+//        NettyClientHandler.sendMsg(input.toString());
         return true;
     }
 
     @Override
     public void onAddAttachments() {
-        super.messagesAdapter.addToStart(
-                MessagesFixtures.getImageMessage(), true);
+        super.messagesAdapter.addToStart(MessagesFixtures.getImageMessage(), true);
     }
 
     private void initAdapter() {
@@ -84,9 +83,9 @@ public class DefaultMessagesActivity extends MessagesActivity
         super.messagesAdapter.enableSelectionMode(this);
         super.messagesAdapter.setLoadMoreListener(this);
         super.messagesAdapter.registerViewClickListener(R.id.messageUserAvatar,
-                new MessagesListAdapter.OnMessageViewClickListener<Message>() {
+                new MessagesListAdapter.OnMessageViewClickListener<ChatMessage>() {
                     @Override
-                    public void onMessageViewClick(View view, Message message) {
+                    public void onMessageViewClick(View view, ChatMessage message) {
                         AppUtils.showToast(DefaultMessagesActivity.this,
                                 message.getUser().getName() + " avatar click",
                                 false);

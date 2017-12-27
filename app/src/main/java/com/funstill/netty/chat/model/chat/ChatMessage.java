@@ -1,5 +1,6 @@
-package com.funstill.netty.chat.model;
+package com.funstill.netty.chat.model.chat;
 
+import com.funstill.netty.chat.model.User;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.MessageContentType;
 
@@ -8,7 +9,7 @@ import java.util.Date;
 /*
  * Created by troy379 on 04.04.17.
  */
-public class Message implements IMessage,
+public class ChatMessage implements IMessage,
         MessageContentType.Image, /*this is for default image messages implementation*/
         MessageContentType /*and this one is for custom content type (in this case - voice message)*/ {
 
@@ -19,11 +20,11 @@ public class Message implements IMessage,
     private Image image;
     private Voice voice;
 
-    public Message(String id, User user, String text) {
+    public ChatMessage(String id, User user, String text) {
         this(id, user, text, new Date());
     }
 
-    public Message(String id, User user, String text, Date createdAt) {
+    public ChatMessage(String id, User user, String text, Date createdAt) {
         this.id = id;
         this.text = text;
         this.user = user;
@@ -80,7 +81,6 @@ public class Message implements IMessage,
     }
 
     public static class Image {
-
         private String url;
 
         public Image(String url) {

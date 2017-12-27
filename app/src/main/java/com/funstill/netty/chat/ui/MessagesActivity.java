@@ -1,7 +1,6 @@
 package com.funstill.netty.chat.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,14 +10,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.fixtures.MessagesFixtures;
-import com.funstill.netty.chat.model.Message;
+import com.funstill.netty.chat.model.chat.ChatMessage;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 /*
@@ -28,17 +25,13 @@ public abstract class MessagesActivity extends AppCompatActivity
         implements MessagesListAdapter.SelectionListener,
         MessagesListAdapter.OnLoadMoreListener {
 
-    // TODO 测试数据
-    private static final int TOTAL_MESSAGES_COUNT = 10;
-
     //发送者id
     protected static String senderId = "0";
     protected ImageLoader imageLoader;
-    protected MessagesListAdapter<Message> messagesAdapter;
+    protected MessagesListAdapter<ChatMessage> messagesAdapter;
 
     private Menu menu;
     private int selectionCount;
-    private Date lastLoadedDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,21 +97,21 @@ public abstract class MessagesActivity extends AppCompatActivity
         menu.findItem(R.id.action_copy).setVisible(count > 0);
     }
 
-    protected void loadMessages() {
-        new Handler().postDelayed(new Runnable() { //imitation of internet connection
-            @Override
-            public void run() {
-                ArrayList<Message> messages = MessagesFixtures.getMessages(lastLoadedDate);
-                lastLoadedDate = messages.get(messages.size() - 1).getCreatedAt();
-                messagesAdapter.addToEnd(messages, false);
-            }
-        }, 1000);
-    }
+//    protected void loadMessages() {
+//        new Handler().postDelayed(new Runnable() { //imitation of internet connection
+//            @Override
+//            public void run() {
+//                ArrayList<ChatMessage> messages = MessagesFixtures.getMessages(lastLoadedDate);
+//                lastLoadedDate = messages.get(messages.size() - 1).getCreatedAt();
+//                messagesAdapter.addToEnd(messages, false);
+//            }
+//        }, 1000);
+//    }
 
-    private MessagesListAdapter.Formatter<Message> getMessageStringFormatter() {
-        return new MessagesListAdapter.Formatter<Message>() {
+    private MessagesListAdapter.Formatter<ChatMessage> getMessageStringFormatter() {
+        return new MessagesListAdapter.Formatter<ChatMessage>() {
             @Override
-            public String format(Message message) {
+            public String format(ChatMessage message) {
                 String createdAt = new SimpleDateFormat("MMM d, EEE 'at' h:mm a", Locale.getDefault())
                         .format(message.getCreatedAt());
 

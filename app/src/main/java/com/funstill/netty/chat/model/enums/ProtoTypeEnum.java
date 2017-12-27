@@ -1,4 +1,4 @@
-package com.funstill.netty.chat.model;
+package com.funstill.netty.chat.model.enums;
 
 /**
  * @author liukaiyang

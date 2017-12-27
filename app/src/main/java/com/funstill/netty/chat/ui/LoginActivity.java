@@ -20,8 +20,8 @@ import android.widget.Toast;
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.config.ClientType;
 import com.funstill.netty.chat.config.Const;
-import com.funstill.netty.chat.model.ProtoTypeEnum;
-import com.funstill.netty.chat.model.ResponseEnum;
+import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
+import com.funstill.netty.chat.model.enums.ResponseEnum;
 import com.funstill.netty.chat.netty.NettyClientHandler;
 import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.permission.MPermission;
@@ -80,6 +80,7 @@ public class LoginActivity extends FragmentActivity {
                         try {
                             res=AuthResponseMsg.Content.parseFrom(msg.getContent());
                             if(res.getCode()== ResponseEnum.SUCCESS.getCode()){
+                                //如果登录成功保存登录信息
                                 editor.putString(Const.LOGING_USERNAME,mPhoneEdit.getText().toString());
                                 editor.putString(Const.LOGIN_USER_ID,res.getUserId());
                                 editor.commit();

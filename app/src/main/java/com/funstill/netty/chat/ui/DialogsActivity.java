@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.funstill.netty.chat.model.Dialog;
+import com.funstill.netty.chat.model.chat.ChatDialog;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
@@ -15,11 +15,11 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
  * Created by troy379 on 05.04.17.
  */
 public abstract class DialogsActivity extends AppCompatActivity
-        implements DialogsListAdapter.OnDialogClickListener<Dialog>,
-        DialogsListAdapter.OnDialogLongClickListener<Dialog> {
+        implements DialogsListAdapter.OnDialogClickListener<ChatDialog>,
+        DialogsListAdapter.OnDialogLongClickListener<ChatDialog> {
 
     protected ImageLoader imageLoader;
-    protected DialogsListAdapter<Dialog> dialogsAdapter;
+    protected DialogsListAdapter<ChatDialog> dialogsAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public abstract class DialogsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogLongClick(Dialog dialog) {
+    public void onDialogLongClick(ChatDialog dialog) {
         AppUtils.showToast(
                 this,
                 dialog.getDialogName(),

@@ -8,25 +8,36 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+    buildscript {
+        repositories {
+            maven { url "http://objectbox.net/beta-repo/" }
+            jcenter()
+            mavenCentral()
+            google()
+        }
+    }
+
     repositories {
-        google()
+        maven { url "http://objectbox.net/beta-repo/" }
         jcenter()
+        mavenCentral()
+        google()
     }
 }
 ext {
+    objectboxVersion = '1.3.4'
     compileSdkVersion = 26
     buildToolsVersion = '26.0.2'
     minSdkVersion = 23
     targetSdkVersion = 26
     appTargetSdkVersion = 26
+
     versionCode = 40
     versionName = '4.4.0'
     sdkSourceCompatibility = 1.7

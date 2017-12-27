@@ -1,9 +1,9 @@
 package com.funstill.netty.chat.fixtures;
 
 
-import com.funstill.netty.chat.model.Dialog;
-import com.funstill.netty.chat.model.Message;
+import com.funstill.netty.chat.model.chat.ChatMessage;
 import com.funstill.netty.chat.model.User;
+import com.funstill.netty.chat.model.chat.ChatDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,10 +17,10 @@ public final class DialogsFixtures extends FixturesData {
         throw new AssertionError();
     }
 
-    public static ArrayList<Dialog> getDialogs() {
-        ArrayList<Dialog> chats = new ArrayList<>();
+    public static ArrayList<ChatDialog> getDialogs() {
+        ArrayList<ChatDialog> chats = new ArrayList<>();
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -(i * i));
             calendar.add(Calendar.MINUTE, -(i * i));
@@ -31,15 +31,9 @@ public final class DialogsFixtures extends FixturesData {
         return chats;
     }
 
-    private static Dialog getDialog(int i, Date lastMessageCreatedAt) {
+    private static ChatDialog getDialog(int i, Date lastMessageCreatedAt) {
         ArrayList<User> users = getUsers();
-        return new Dialog(
-                getRandomId(),
-                users.size() > 1 ? groupChatTitles.get(users.size() - 2) : users.get(0).getName(),
-                users.size() > 1 ? groupChatImages.get(users.size() - 2) : getRandomAvatar(),
-                users,
-                getMessage(lastMessageCreatedAt),
-                i < 3 ? 3 - i : 0);
+        return new ChatDialog();
     }
 
     private static ArrayList<User> getUsers() {
@@ -61,8 +55,8 @@ public final class DialogsFixtures extends FixturesData {
                 getRandomBoolean());
     }
 
-    private static Message getMessage(final Date date) {
-        return new Message(
+    private static ChatMessage getMessage(final Date date) {
+        return new ChatMessage(
                 getRandomId(),
                 getUser(),
                 getRandomMessage(),
