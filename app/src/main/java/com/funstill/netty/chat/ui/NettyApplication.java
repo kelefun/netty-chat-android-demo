@@ -3,6 +3,7 @@ package com.funstill.netty.chat.ui;
 import android.app.Application;
 import android.support.multidex.MultiDex;
 
+import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.netty.NettyClientStarter;
 
 /**
@@ -18,7 +19,7 @@ public class NettyApplication extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new NettyClientStarter().connect(8089, "192.168.1.83");
+                new NettyClientStarter().connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
             }
         }).start();
 

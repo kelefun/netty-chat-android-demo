@@ -1,18 +1,22 @@
 package com.funstill.netty.chat.model.chat;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by liukaiyang on 2017/12/27.
  */
 public class ChatFriend {
 
     //TODO 测试
-    public ChatFriend(String desc) {
-        this.desc = desc;
+    public ChatFriend(String selfDesc) {
+        this.selfDesc = selfDesc;
     }
 
+    @SerializedName("friendNoteName")
     private String nickname;
 
-    private String desc;
+
+    private String selfDesc;
     private String avatar;
 
     public String getNickname() {
@@ -23,13 +27,6 @@ public class ChatFriend {
         this.nickname = nickname;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 
     public String getAvatar() {
         return avatar;
@@ -38,4 +35,23 @@ public class ChatFriend {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public String getSelfDesc() {
+        return selfDesc;
+    }
+
+    public void setSelfDesc(String selfDesc) {
+        this.selfDesc = selfDesc;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatFriend{" +
+                "nickname='" + nickname + '\'' +
+                ", desc='" + selfDesc + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
+    }
+
+
 }

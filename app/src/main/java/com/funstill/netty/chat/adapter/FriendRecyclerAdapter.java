@@ -83,7 +83,8 @@ public abstract class FriendRecyclerAdapter<T> extends RecyclerView.Adapter<Frie
         }
 
         ChatFriend t = (ChatFriend) mObjects.get(position);
-        holder.desc.setText(t.getDesc());
+        holder.desc.setText(t.getSelfDesc());
+        holder.nickname.setText(t.getNickname());
     }
 
     //添加
