@@ -20,6 +20,8 @@ import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
+import java.util.Date;
+
 import io.netty.channel.Channel;
 
 public class DefaultMessagesActivity extends MessagesActivity
@@ -53,7 +55,7 @@ public class DefaultMessagesActivity extends MessagesActivity
                             res=CommonMsg.Content.parseFrom(msg.getContent());
                             if(res.getMsgType()==1){
                                 User user=new User(res.getSender()+"",res.getSender()+"","http://i.imgur.com/pv1tBmT.png",true);
-                                ChatMessage chatKitMsg=new ChatMessage(msg.getUuid(),user , res.getContent());
+                                ChatMessage chatKitMsg=new ChatMessage(msg.getUuid(),user , res.getContent(),new Date());
                                 messagesAdapter.addToStart(chatKitMsg,true);
                             }
                         } catch (InvalidProtocolBufferException e) {

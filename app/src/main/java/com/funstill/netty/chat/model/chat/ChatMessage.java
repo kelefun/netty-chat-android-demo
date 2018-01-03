@@ -20,8 +20,7 @@ public class ChatMessage implements IMessage,
     private Image image;
     private Voice voice;
 
-    public ChatMessage(String id, User user, String text) {
-        this(id, user, text, new Date());
+    public ChatMessage() {
     }
 
     public ChatMessage(String id, User user, String text, Date createdAt) {

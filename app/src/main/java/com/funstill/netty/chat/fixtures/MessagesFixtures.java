@@ -17,13 +17,13 @@ public final class MessagesFixtures extends FixturesData {
     }
 
     public static ChatMessage getImageMessage() {
-        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null);
+        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null,new Date());
         message.setImage(new ChatMessage.Image(getRandomImage()));
         return message;
     }
 
     public static ChatMessage getVoiceMessage() {
-        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null);
+        ChatMessage message = new ChatMessage(getRandomId(), getUser(), null,new Date());
         message.setVoice(new ChatMessage.Voice("http://example.com", rnd.nextInt(200) + 30));
         return message;
     }
@@ -35,7 +35,7 @@ public final class MessagesFixtures extends FixturesData {
     public static ChatMessage getTextMessage(String text) {
         User user=getUser();
         user.setId("0");
-        return new ChatMessage(getRandomId(), user, text);
+        return new ChatMessage(getRandomId(), user, text,new Date());
     }
 
     public static ArrayList<ChatMessage> getMessages(Date startDate) {

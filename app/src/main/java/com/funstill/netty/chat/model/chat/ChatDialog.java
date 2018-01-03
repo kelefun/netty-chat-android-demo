@@ -73,4 +73,8 @@ public class ChatDialog extends BaseModel implements IDialog {
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
     }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
 }

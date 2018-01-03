@@ -12,6 +12,7 @@ public class User implements IUser {
     private String avatar;
     private boolean online;
 
+    public User() {}
     public User(String id, String name, String avatar, boolean online) {
         this.id = id;
         this.name = name;

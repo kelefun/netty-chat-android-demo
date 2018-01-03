@@ -70,29 +70,30 @@ public class LoginActivity extends FragmentActivity {
         initObserver();
     }
 
-    private void initObserver(){
-        if(loginObserver==null){
-            loginObserver=new ProtoMsgObserver() {
+    //netty登录响应观察
+    private void initObserver() {
+        if (loginObserver == null) {
+            loginObserver = new ProtoMsgObserver() {
                 @Override
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
-                    if(msg.getProtoType()== ProtoTypeEnum.LOGIN_RES_MSG.getIndex()){//登录响应信息
+                    if (msg.getProtoType() == ProtoTypeEnum.LOGIN_RES_MSG.getIndex()) {//登录响应信息
                         AuthResponseMsg.Content res;
                         try {
-                            res=AuthResponseMsg.Content.parseFrom(msg.getContent());
-                            if(res.getCode()== ResponseEnum.SUCCESS.getCode()){
+                            res = AuthResponseMsg.Content.parseFrom(msg.getContent());
+                            if (res.getCode() == ResponseEnum.SUCCESS.getCode()) {
                                 //如果登录成功保存登录信息
-                                editor.putString(Const.LOGING_USERNAME,mPhoneEdit.getText().toString());
-                                editor.putString(Const.LOGIN_USER_ID,res.getUserId());
+                                editor.putString(Const.LOGING_USERNAME, mPhoneEdit.getText().toString());
+                                editor.putString(Const.LOGIN_USER_ID, res.getUserId());
                                 editor.commit();
                                 DefaultMessagesActivity.senderId = res.getUserId();
-                                DefaultMessagesActivity.open(getApplicationContext());
+                                CustomLayoutDialogsActivity.open(LoginActivity.this);
                                 finish();//结束此页面
-                            }else {
-                                AppUtils.showToast(getApplicationContext(),res.getMsg(),false);
+                            } else {
+                                AppUtils.showToast(LoginActivity.this, res.getMsg(), false);
                             }
                         } catch (InvalidProtocolBufferException e) {
                             e.printStackTrace();
-                            AppUtils.showToast(getApplicationContext(),"登录失败",false);
+                            AppUtils.showToast(LoginActivity.this, "登录失败", false);
                         }
                     }
                 }
@@ -100,12 +101,14 @@ public class LoginActivity extends FragmentActivity {
         }
         NettyClientHandler.msgObservable.addObserver(loginObserver);
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         NettyClientHandler.msgObservable.deleteObserver(loginObserver);
 
     }
+
     private void initView() {
         mPhoneEdit = (ClearWriteEditText) findViewById(R.id.de_login_phone);
         mPasswordEdit = (ClearWriteEditText) findViewById(R.id.de_login_password);
@@ -113,7 +116,19 @@ public class LoginActivity extends FragmentActivity {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO 检测登录信息是否为空
+                String phoneString = mPhoneEdit.getText().toString().trim();
+                String passwordString = mPasswordEdit.getText().toString().trim();
+                if (TextUtils.isEmpty(phoneString)) {
+                    AppUtils.showToast(LoginActivity.this, "账号不能为空", false);
+                    mPhoneEdit.setShakeAnimation();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(passwordString)) {
+                    AppUtils.showToast(LoginActivity.this, "密码不能为空", false);
+                    mPasswordEdit.setShakeAnimation();
+                    return;
+                }
                 //发送登录消息
                 AuthMsg.Content.Builder authBuilder = AuthMsg.Content.newBuilder();
                 authBuilder.setUsername(mPhoneEdit.getText().toString());
@@ -121,10 +136,12 @@ public class LoginActivity extends FragmentActivity {
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
                 msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_MSG.getIndex());
                 msgBuilder.setContent(authBuilder.build().toByteString());
-                if(NettyClientHandler.channel!=null&&NettyClientHandler.channel.isActive()){
+                if (NettyClientHandler.channel != null && NettyClientHandler.channel.isActive()) {
                     NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
+                } else {
+                    AppUtils.showToast(LoginActivity.this, "与服务器连接异常", false);
                 }
-                CustomLayoutDialogsActivity.open(LoginActivity.this);
+
             }
         });
         mImg_Background = (ImageView) findViewById(R.id.de_img_backgroud);
