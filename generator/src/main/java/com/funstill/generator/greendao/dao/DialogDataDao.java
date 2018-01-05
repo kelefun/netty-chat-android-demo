@@ -28,9 +28,10 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
         public final static Property LastMsgId = new Property(1, Long.class, "lastMsgId", false, "LAST_MSG_ID");
         public final static Property Users = new Property(2, String.class, "users", false, "USERS");
         public final static Property UnreadCount = new Property(3, Integer.class, "unreadCount", false, "UNREAD_COUNT");
-        public final static Property DialogName = new Property(4, String.class, "dialogName", false, "DIALOG_NAME");
-        public final static Property CreateDate = new Property(5, java.util.Date.class, "createDate", false, "CREATE_DATE");
-        public final static Property UpdateDate = new Property(6, java.util.Date.class, "updateDate", false, "UPDATE_DATE");
+        public final static Property DialogType = new Property(4, Integer.class, "dialogType", false, "DIALOG_TYPE");
+        public final static Property DialogName = new Property(5, String.class, "dialogName", false, "DIALOG_NAME");
+        public final static Property CreateDate = new Property(6, java.util.Date.class, "createDate", false, "CREATE_DATE");
+        public final static Property UpdateDate = new Property(7, java.util.Date.class, "updateDate", false, "UPDATE_DATE");
     }
 
 
@@ -50,9 +51,10 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
                 "\"LAST_MSG_ID\" INTEGER UNIQUE ," + // 1: lastMsgId
                 "\"USERS\" TEXT," + // 2: users
                 "\"UNREAD_COUNT\" INTEGER," + // 3: unreadCount
-                "\"DIALOG_NAME\" TEXT," + // 4: dialogName
-                "\"CREATE_DATE\" INTEGER," + // 5: createDate
-                "\"UPDATE_DATE\" INTEGER);"); // 6: updateDate
+                "\"DIALOG_TYPE\" INTEGER NOT NULL ," + // 4: dialogType
+                "\"DIALOG_NAME\" TEXT," + // 5: dialogName
+                "\"CREATE_DATE\" INTEGER," + // 6: createDate
+                "\"UPDATE_DATE\" INTEGER);"); // 7: updateDate
     }
 
     /** Drops the underlying database table. */
@@ -84,20 +86,21 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
         if (unreadCount != null) {
             stmt.bindLong(4, unreadCount);
         }
+        stmt.bindLong(5, entity.getDialogType());
  
         String dialogName = entity.getDialogName();
         if (dialogName != null) {
-            stmt.bindString(5, dialogName);
+            stmt.bindString(6, dialogName);
         }
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
-            stmt.bindLong(6, createDate.getTime());
+            stmt.bindLong(7, createDate.getTime());
         }
  
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(7, updateDate.getTime());
+            stmt.bindLong(8, updateDate.getTime());
         }
     }
 
@@ -124,20 +127,21 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
         if (unreadCount != null) {
             stmt.bindLong(4, unreadCount);
         }
+        stmt.bindLong(5, entity.getDialogType());
  
         String dialogName = entity.getDialogName();
         if (dialogName != null) {
-            stmt.bindString(5, dialogName);
+            stmt.bindString(6, dialogName);
         }
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
-            stmt.bindLong(6, createDate.getTime());
+            stmt.bindLong(7, createDate.getTime());
         }
  
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(7, updateDate.getTime());
+            stmt.bindLong(8, updateDate.getTime());
         }
     }
 
@@ -153,9 +157,10 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // lastMsgId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // users
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // unreadCount
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // dialogName
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // createDate
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // updateDate
+            cursor.getInt(offset + 4), // dialogType
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // dialogName
+            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // createDate
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)) // updateDate
         );
         return entity;
     }
@@ -166,9 +171,10 @@ public class DialogDataDao extends AbstractDao<DialogData, Long> {
         entity.setLastMsgId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setUsers(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setUnreadCount(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setDialogName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCreateDate(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setUpdateDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setDialogType(cursor.getInt(offset + 4));
+        entity.setDialogName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCreateDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setUpdateDate(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
      }
     
     @Override

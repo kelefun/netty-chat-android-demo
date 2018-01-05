@@ -27,11 +27,12 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Uuid = new Property(1, String.class, "uuid", false, "UUID");
         public final static Property SenderId = new Property(2, Long.class, "senderId", false, "SENDER_ID");
-        public final static Property Content = new Property(3, String.class, "content", false, "CONTENT");
-        public final static Property MsgType = new Property(4, Integer.class, "msgType", false, "MSG_TYPE");
-        public final static Property DialogId = new Property(5, Long.class, "dialogId", false, "DIALOG_ID");
-        public final static Property CreateDate = new Property(6, java.util.Date.class, "createDate", false, "CREATE_DATE");
-        public final static Property UpdateDate = new Property(7, java.util.Date.class, "updateDate", false, "UPDATE_DATE");
+        public final static Property ReceiverId = new Property(3, Long.class, "receiverId", false, "RECEIVER_ID");
+        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
+        public final static Property MsgType = new Property(5, Integer.class, "msgType", false, "MSG_TYPE");
+        public final static Property DialogId = new Property(6, Long.class, "dialogId", false, "DIALOG_ID");
+        public final static Property CreateDate = new Property(7, java.util.Date.class, "createDate", false, "CREATE_DATE");
+        public final static Property UpdateDate = new Property(8, java.util.Date.class, "updateDate", false, "UPDATE_DATE");
     }
 
 
@@ -50,11 +51,12 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"UUID\" TEXT," + // 1: uuid
                 "\"SENDER_ID\" INTEGER NOT NULL ," + // 2: senderId
-                "\"CONTENT\" TEXT," + // 3: content
-                "\"MSG_TYPE\" INTEGER," + // 4: msgType
-                "\"DIALOG_ID\" INTEGER NOT NULL ," + // 5: dialogId
-                "\"CREATE_DATE\" INTEGER," + // 6: createDate
-                "\"UPDATE_DATE\" INTEGER);"); // 7: updateDate
+                "\"RECEIVER_ID\" INTEGER NOT NULL ," + // 3: receiverId
+                "\"CONTENT\" TEXT," + // 4: content
+                "\"MSG_TYPE\" INTEGER," + // 5: msgType
+                "\"DIALOG_ID\" INTEGER NOT NULL ," + // 6: dialogId
+                "\"CREATE_DATE\" INTEGER," + // 7: createDate
+                "\"UPDATE_DATE\" INTEGER);"); // 8: updateDate
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_MESSAGE_DATA_UUID ON \"MESSAGE_DATA\"" +
                 " (\"UUID\" ASC);");
@@ -80,26 +82,27 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
             stmt.bindString(2, uuid);
         }
         stmt.bindLong(3, entity.getSenderId());
+        stmt.bindLong(4, entity.getReceiverId());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(4, content);
+            stmt.bindString(5, content);
         }
  
         Integer msgType = entity.getMsgType();
         if (msgType != null) {
-            stmt.bindLong(5, msgType);
+            stmt.bindLong(6, msgType);
         }
-        stmt.bindLong(6, entity.getDialogId());
+        stmt.bindLong(7, entity.getDialogId());
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
-            stmt.bindLong(7, createDate.getTime());
+            stmt.bindLong(8, createDate.getTime());
         }
  
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(8, updateDate.getTime());
+            stmt.bindLong(9, updateDate.getTime());
         }
     }
 
@@ -117,26 +120,27 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
             stmt.bindString(2, uuid);
         }
         stmt.bindLong(3, entity.getSenderId());
+        stmt.bindLong(4, entity.getReceiverId());
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(4, content);
+            stmt.bindString(5, content);
         }
  
         Integer msgType = entity.getMsgType();
         if (msgType != null) {
-            stmt.bindLong(5, msgType);
+            stmt.bindLong(6, msgType);
         }
-        stmt.bindLong(6, entity.getDialogId());
+        stmt.bindLong(7, entity.getDialogId());
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
-            stmt.bindLong(7, createDate.getTime());
+            stmt.bindLong(8, createDate.getTime());
         }
  
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(8, updateDate.getTime());
+            stmt.bindLong(9, updateDate.getTime());
         }
     }
 
@@ -151,11 +155,12 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // uuid
             cursor.getLong(offset + 2), // senderId
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // content
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // msgType
-            cursor.getLong(offset + 5), // dialogId
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // createDate
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)) // updateDate
+            cursor.getLong(offset + 3), // receiverId
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // content
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // msgType
+            cursor.getLong(offset + 6), // dialogId
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createDate
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updateDate
         );
         return entity;
     }
@@ -165,11 +170,12 @@ public class MessageDataDao extends AbstractDao<MessageData, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUuid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSenderId(cursor.getLong(offset + 2));
-        entity.setContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setMsgType(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setDialogId(cursor.getLong(offset + 5));
-        entity.setCreateDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setUpdateDate(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setReceiverId(cursor.getLong(offset + 3));
+        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setMsgType(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setDialogId(cursor.getLong(offset + 6));
+        entity.setCreateDate(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setUpdateDate(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
      }
     
     @Override

@@ -7,15 +7,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ChatFriend {
 
-    //TODO 测试
-    public ChatFriend(String selfDesc) {
-        this.selfDesc = selfDesc;
-    }
-
     @SerializedName("friendNoteName")
     private String nickname;
-
-
+    private Long friendUserId;
     private String selfDesc;
     private String avatar;
 
@@ -54,4 +48,11 @@ public class ChatFriend {
     }
 
 
+    public Long getFriendUserId() {
+        return friendUserId;
+    }
+
+    public void setFriendUserId(Long friendUserId) {
+        this.friendUserId = friendUserId;
+    }
 }

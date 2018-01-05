@@ -25,10 +25,10 @@ import org.greenrobot.greendao.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomLayoutDialogsActivity extends DialogsActivity {
+public class DefaultDialogsActivity extends BaseDialogsActivity {
 
     public static void open(Context context) {
-        context.startActivity(new Intent(context, CustomLayoutDialogsActivity.class));
+        context.startActivity(new Intent(context, DefaultDialogsActivity.class));
     }
 
     private DialogsList dialogsList;
@@ -63,7 +63,7 @@ public class CustomLayoutDialogsActivity extends DialogsActivity {
     @Override
     public void onDialogClick(ChatDialog dialog) {
         //打开聊天会话
-        DefaultMessagesActivity.open(this);
+        DefaultMessagesActivity.open(this,Long.valueOf(dialog.getId()));
     }
 
     private void initAdapter() {

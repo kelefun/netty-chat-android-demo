@@ -3,6 +3,7 @@ package com.funstill.generator.greendao.entity;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.Date;
@@ -21,19 +22,22 @@ public class DialogData {
     private String users;
     
     private Integer unreadCount;
+    @NotNull
+    private Integer dialogType;
 
     private String dialogName;
 
     private Date createDate;
     private Date updateDate;
 
-    @Generated(hash = 431290312)
-    public DialogData(Long id, Long lastMsgId, String users, Integer unreadCount, String dialogName,
-            Date createDate, Date updateDate) {
+    @Generated(hash = 741103007)
+    public DialogData(Long id, Long lastMsgId, String users, Integer unreadCount,
+            @NotNull Integer dialogType, String dialogName, Date createDate, Date updateDate) {
         this.id = id;
         this.lastMsgId = lastMsgId;
         this.users = users;
         this.unreadCount = unreadCount;
+        this.dialogType = dialogType;
         this.dialogName = dialogName;
         this.createDate = createDate;
         this.updateDate = updateDate;
@@ -98,6 +102,14 @@ public class DialogData {
 
     public void setDialogName(String dialogName) {
         this.dialogName = dialogName;
+    }
+
+    public Integer getDialogType() {
+        return this.dialogType;
+    }
+
+    public void setDialogType(Integer dialogType) {
+        this.dialogType = dialogType;
     }
 
 

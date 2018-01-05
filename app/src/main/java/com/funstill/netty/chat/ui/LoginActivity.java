@@ -86,7 +86,7 @@ public class LoginActivity extends FragmentActivity {
                                 editor.putString(Const.LOGIN_USER_ID, res.getUserId());
                                 editor.commit();
                                 DefaultMessagesActivity.senderId = res.getUserId();
-                                CustomLayoutDialogsActivity.open(LoginActivity.this);
+                                DefaultDialogsActivity.open(LoginActivity.this);
                                 finish();//结束此页面
                             } else {
                                 AppUtils.showToast(LoginActivity.this, res.getMsg(), false);

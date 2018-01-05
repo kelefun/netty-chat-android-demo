@@ -11,15 +11,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.funstill.generator.greendao.dao.DaoSession;
+import com.funstill.generator.greendao.dao.DialogDataDao;
+import com.funstill.generator.greendao.dao.MessageDataDao;
+import com.funstill.generator.greendao.entity.DialogData;
+import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.adapter.FriendRecyclerAdapter;
 import com.funstill.netty.chat.api.FriendApi;
 import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.model.chat.ChatFriend;
+import com.funstill.netty.chat.model.enums.DialogTypeEnum;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.funstill.netty.chat.utils.RequestSubscriber;
 import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +70,7 @@ public class FriendActivity extends AppCompatActivity {
 
     private void loadData() {
         parameters.clear();
-        parameters.put("userId", "11");//TODO 测试数据
+        parameters.put("userId", DefaultMessagesActivity.senderId);
         headers.put("Accept", "application/json");
         novate = new Novate.Builder(this)
                 .addHeader(headers)
@@ -99,7 +107,19 @@ public class FriendActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new FriendRecyclerAdapter.OnItemClickListener() {
             @Override
             public void OnItemClick(View view, int position) {
-                Toast.makeText(FriendActivity.this, "点击事件被触发,位置：" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(FriendActivity.this,
+//                        "点击事件被触发,位置：" + position+itemList.get(position).getNickname(), Toast.LENGTH_SHORT).show();
+                //查询出会话id
+                DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
+                MessageDataDao messageDataDao = daoSession.getMessageDataDao();
+                Long friendId = itemList.get(position).getFriendUserId();
+                QueryBuilder<MessageData> queryBuilder = messageDataDao.queryBuilder()
+                        .where(MessageDataDao.Properties.SenderId.eq(friendId));
+                queryBuilder.join(DialogData.class, DialogDataDao.Properties.Id)
+                        .where(DialogDataDao.Properties.DialogType.eq(DialogTypeEnum.PRIVATE_DIALOG.getIndex()));
+                MessageData messageData = queryBuilder.limit(1).build().unique();
+                DefaultMessagesActivity.open(FriendActivity.this, messageData==null?null:messageData.getDialogId());
+                finish();
             }
         });
 
@@ -122,7 +142,7 @@ public class FriendActivity extends AppCompatActivity {
             //TODO 下面是测试代码
             Random random = new Random();
             int i = random.nextInt(3);
-            ChatFriend item = new ChatFriend("..."+i);
+            ChatFriend item = new ChatFriend();
             adapter.addData(position, item);
         }
 

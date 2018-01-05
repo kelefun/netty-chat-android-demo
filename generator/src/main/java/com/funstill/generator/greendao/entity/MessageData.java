@@ -19,19 +19,22 @@ public class MessageData {
     private String uuid;
     @NotNull
     private Long senderId;
+    @NotNull
+    private Long receiverId;
     private String content;
     private Integer msgType;
     @NotNull
     private Long dialogId;
     private Date createDate;
     private Date updateDate;
-    @Generated(hash = 428758804)
-    public MessageData(Long id, String uuid, @NotNull Long senderId, String content,
-            Integer msgType, @NotNull Long dialogId, Date createDate,
-            Date updateDate) {
+    @Generated(hash = 2050978919)
+    public MessageData(Long id, String uuid, @NotNull Long senderId,
+            @NotNull Long receiverId, String content, Integer msgType,
+            @NotNull Long dialogId, Date createDate, Date updateDate) {
         this.id = id;
         this.uuid = uuid;
         this.senderId = senderId;
+        this.receiverId = receiverId;
         this.content = content;
         this.msgType = msgType;
         this.dialogId = dialogId;
@@ -105,5 +108,13 @@ public class MessageData {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Long getReceiverId() {
+        return this.receiverId;
+    }
+
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 }

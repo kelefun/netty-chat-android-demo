@@ -14,7 +14,7 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 /*
  * Created by troy379 on 05.04.17.
  */
-public abstract class DialogsActivity extends AppCompatActivity
+public abstract class BaseDialogsActivity extends AppCompatActivity
         implements DialogsListAdapter.OnDialogClickListener<ChatDialog>,
         DialogsListAdapter.OnDialogLongClickListener<ChatDialog> {
 
@@ -28,7 +28,7 @@ public abstract class DialogsActivity extends AppCompatActivity
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
-                Glide.with(DialogsActivity.this).load(url).into(imageView);
+                Glide.with(BaseDialogsActivity.this).load(url).into(imageView);
             }
         };
     }

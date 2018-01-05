@@ -21,7 +21,7 @@ import java.util.Locale;
 /*
  * Created by troy379 on 04.04.17.
  */
-public abstract class MessagesActivity extends AppCompatActivity
+public abstract class BaseMessagesActivity extends AppCompatActivity
         implements MessagesListAdapter.SelectionListener,
         MessagesListAdapter.OnLoadMoreListener {
 
@@ -40,7 +40,7 @@ public abstract class MessagesActivity extends AppCompatActivity
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
-                Glide.with(MessagesActivity.this).load(url).into(imageView);
+                Glide.with(BaseMessagesActivity.this).load(url).into(imageView);
             }
         };
     }
@@ -82,13 +82,7 @@ public abstract class MessagesActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onLoadMore(int page, int totalItemsCount) {
-        //TODO 加载历史消息
-//        if (totalItemsCount < TOTAL_MESSAGES_COUNT) {
-//            loadMessages();
-//        }
-    }
+
 
     @Override
     public void onSelectionChanged(int count) {
