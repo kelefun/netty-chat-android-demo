@@ -24,7 +24,7 @@ public abstract class BaseMessagesActivity extends AppCompatActivity
         implements MessagesListAdapter.SelectionListener,
         MessagesListAdapter.OnLoadMoreListener {
 
-    //发送者id
+    //发送者id(登录用户即自己的id)
     protected static String senderId = "0";
     protected ImageLoader imageLoader;
     protected MessagesListAdapter<ChatMessage> messagesAdapter;

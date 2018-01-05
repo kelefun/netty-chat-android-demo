@@ -60,9 +60,8 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                 @Override
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
                     if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG.getIndex()) {
-                        CommonMsg.Content res;
                         try {
-                            res = CommonMsg.Content.parseFrom(msg.getContent());
+                            CommonMsg.Content  res = CommonMsg.Content.parseFrom(msg.getContent());
                             if (res.getMsgType() == 1) {
                                 User user = new User(res.getSender() + "", res.getSender() + "", "http://i.imgur.com/pv1tBmT.png", true);
                                 ChatMessage chatKitMsg = new ChatMessage(msg.getUuid(), user, res.getContent(), new Date());
@@ -80,7 +79,12 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
 
     @Override
     public boolean onSubmit(CharSequence input) {
-        ChatMessage msg = MessagesFixtures.getTextMessage(input.toString());
+        //查询当前用户信息
+        User user=new User();
+        user.setAvatar("http://i.imgur.com/pv1tBmT.png");
+        user.setName("");
+        user.setId(DefaultMessagesActivity.senderId);
+        ChatMessage msg = new ChatMessage("", user, input.toString(),new Date());
         super.messagesAdapter.addToStart(msg, true);
 //        NettyClientHandler.sendMsg(input.toString());
         return true;

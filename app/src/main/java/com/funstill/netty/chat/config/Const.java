@@ -6,6 +6,8 @@ package com.funstill.netty.chat.config;
 
 public interface Const {
      String LOGIN_USER_ID = "userId";
-     String LOGING_USERNAME = "username";
+     String LOGIN_USERNAME = "username";
+     String LOGIN_NICKNAME = "nickname";
+     String LOGIN_AVATAR = "avatar";
      String LOGING_PASSWORD = "password";
 }

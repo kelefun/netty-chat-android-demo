@@ -32,6 +32,8 @@ import com.funstill.netty.chat.protobuf.AuthResponseMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.funstill.netty.chat.widget.ClearWriteEditText;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import io.netty.channel.Channel;
@@ -82,9 +84,8 @@ public class LoginActivity extends FragmentActivity {
                             res = AuthResponseMsg.Content.parseFrom(msg.getContent());
                             if (res.getCode() == ResponseEnum.SUCCESS.getCode()) {
                                 //如果登录成功保存登录信息
-                                editor.putString(Const.LOGING_USERNAME, mPhoneEdit.getText().toString());
-                                editor.putString(Const.LOGIN_USER_ID, res.getUserId());
-                                editor.commit();
+                                saveMyInfo(res.getExtra());
+                                //跳转
                                 DefaultMessagesActivity.senderId = res.getUserId();
                                 DefaultDialogsActivity.open(LoginActivity.this);
                                 finish();//结束此页面
@@ -100,6 +101,15 @@ public class LoginActivity extends FragmentActivity {
             };
         }
         NettyClientHandler.msgObservable.addObserver(loginObserver);
+    }
+
+    private void saveMyInfo(String userJson) {
+        JsonObject returnData = new JsonParser().parse(userJson).getAsJsonObject();
+        editor.putString(Const.LOGIN_USERNAME, mPhoneEdit.getText().toString());
+        editor.putString(Const.LOGIN_USER_ID, returnData.get("userId").toString());
+        editor.putString(Const.LOGIN_AVATAR, returnData.get("avatar").toString());
+        editor.putString(Const.LOGIN_NICKNAME, returnData.get("nickname").toString());
+        editor.commit();
     }
 
     @Override
@@ -171,7 +181,7 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        String oldPhone = sp.getString(Const.LOGING_USERNAME, "");
+        String oldPhone = sp.getString(Const.LOGIN_USERNAME, "");
 
         if (!TextUtils.isEmpty(oldPhone)) {
             mPhoneEdit.setText(oldPhone);

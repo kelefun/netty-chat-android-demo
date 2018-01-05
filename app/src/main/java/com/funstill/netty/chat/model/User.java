@@ -42,4 +42,16 @@ public class User implements IUser {
     public boolean isOnline() {
         return online;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 }
