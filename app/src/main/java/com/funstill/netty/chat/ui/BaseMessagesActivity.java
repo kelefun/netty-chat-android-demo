@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.fixtures.MessagesFixtures;
 import com.funstill.netty.chat.model.chat.ChatMessage;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.stfalcon.chatkit.commons.ImageLoader;
@@ -45,11 +44,10 @@ public abstract class BaseMessagesActivity extends AppCompatActivity
         };
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        messagesAdapter.addToStart(MessagesFixtures.getTextMessage(), true);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
