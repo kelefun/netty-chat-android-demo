@@ -41,8 +41,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.close();
-        Log.e("连接异常", "exceptionCaught=");
-        cause.printStackTrace();
+        Log.e("连接异常exceptionCaught=", cause.getMessage());
     }
 
     @Override

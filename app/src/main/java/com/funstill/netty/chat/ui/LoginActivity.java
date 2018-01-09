@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.config.ClientType;
 import com.funstill.netty.chat.config.Const;
 import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
 import com.funstill.netty.chat.model.enums.ResponseEnum;
@@ -78,7 +78,7 @@ public class LoginActivity extends FragmentActivity {
             loginObserver = new ProtoMsgObserver() {
                 @Override
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
-                    if (msg.getProtoType() == ProtoTypeEnum.LOGIN_RES_MSG.getIndex()) {//登录响应信息
+                    if (msg.getProtoType() == ProtoTypeEnum.LOGIN_RESPONSE_MSG.getIndex()) {//登录响应信息
                         AuthResponseMsg.Content res;
                         try {
                             res = AuthResponseMsg.Content.parseFrom(msg.getContent());
@@ -90,11 +90,13 @@ public class LoginActivity extends FragmentActivity {
                                 DefaultDialogsActivity.open(LoginActivity.this);
                                 finish();//结束此页面
                             } else {
-                                AppUtils.showToast(LoginActivity.this, res.getMsg(), false);
+                                Log.e("登录失败,返回信息为=",res.getMsg());
+                                //TODO 怎么更新主线程ui
+//                                AppUtils.showToast(LoginActivity.this, res.getMsg(), false);
                             }
                         } catch (InvalidProtocolBufferException e) {
-                            e.printStackTrace();
-                            AppUtils.showToast(LoginActivity.this, "登录失败", false);
+                           Log.e("",e.getMessage());
+//                            AppUtils.showToast(LoginActivity.this, "登录失败", false);
                         }
                     }
                 }
@@ -144,7 +146,7 @@ public class LoginActivity extends FragmentActivity {
                 authBuilder.setUsername(mPhoneEdit.getText().toString());
                 authBuilder.setPassword(mPasswordEdit.getText().toString());
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
-                msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_MSG.getIndex());
+                msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_REQUEST_MSG.getIndex());
                 msgBuilder.setContent(authBuilder.build().toByteString());
                 if (NettyClientHandler.channel != null && NettyClientHandler.channel.isActive()) {
                     NettyClientHandler.channel.writeAndFlush(msgBuilder.build());
@@ -155,6 +157,7 @@ public class LoginActivity extends FragmentActivity {
             }
         });
         mImg_Background = (ImageView) findViewById(R.id.de_img_backgroud);
+        //登录背景动画
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -220,30 +223,5 @@ public class LoginActivity extends FragmentActivity {
         Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
     }
 
-    private void onParseIntent() {
-        if (getIntent().getBooleanExtra(KICK_OUT, false)) {
-            //TODO 需要正确获取
-            int type = 0;
-            String client;
-            switch (type) {
-                case ClientType.Web:
-                    client = "网页端";
-                    break;
-                case ClientType.Windows:
-                case ClientType.MAC:
-                    client = "电脑端";
-                    break;
-                case ClientType.REST:
-                    client = "服务端";
-                    break;
-                default:
-                    client = "移动端";
-                    break;
-            }
-            //TODO 通知
-//            EasyAlertDialogHelper.showOneButtonDiolag(LoginActivity.this, getString(R.string.kickout_notify),
-//                    String.format(getString(R.string.kickout_content), client), getString(R.string.ok), true, null);
-        }
-    }
 
 }

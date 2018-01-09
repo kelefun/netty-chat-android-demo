@@ -23,9 +23,6 @@ import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.model.chat.ChatFriend;
 import com.funstill.netty.chat.model.enums.DialogTypeEnum;
 import com.funstill.netty.chat.utils.AppUtils;
-import com.funstill.netty.chat.utils.RequestSubscriber;
-import com.tamic.novate.Novate;
-import com.tamic.novate.Throwable;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -48,7 +45,6 @@ public class FriendActivity extends AppCompatActivity {
     private RecyclerView list;
     private MyAdapter adapter;
 
-    private Novate novate;
     private Map<String, Object> parameters = new HashMap<>();
     private Map<String, String> headers = new HashMap<>();
 
@@ -72,31 +68,8 @@ public class FriendActivity extends AppCompatActivity {
         parameters.clear();
         parameters.put("userId", DefaultMessagesActivity.senderId);
         headers.put("Accept", "application/json");
-        novate = new Novate.Builder(this)
-                .addHeader(headers)
-                .addParameters(parameters)
-                .baseUrl(ServerConfig.WEB_URL)
-                .addCache(false)
-                .addLog(true)
-                .build();
-
-
-        FriendApi myAPI = novate.create(FriendApi.class);
-
-        novate.call(myAPI.getFriendList(parameters),
-                new RequestSubscriber<List<ChatFriend>>(FriendActivity.this) {
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(FriendActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(List<ChatFriend> friendList) {
-//                        Toast.makeText(FriendActivity.this, "好友列表size=" + friend.size(), Toast.LENGTH_SHORT).show();
-                        itemList = friendList;
-                        initData();
-                    }
-                });
+//                        itemList = friendList;
+//                        initData();
 
     }
 
@@ -118,7 +91,7 @@ public class FriendActivity extends AppCompatActivity {
                 queryBuilder.join(DialogData.class, DialogDataDao.Properties.Id)
                         .where(DialogDataDao.Properties.DialogType.eq(DialogTypeEnum.PRIVATE_DIALOG.getIndex()));
                 MessageData messageData = queryBuilder.limit(1).build().unique();
-                DefaultMessagesActivity.open(FriendActivity.this, messageData==null?null:messageData.getDialogId());
+                DefaultMessagesActivity.open(FriendActivity.this, messageData == null ? null : messageData.getDialogId());
                 finish();
             }
         });
