@@ -23,16 +23,21 @@ public class StompWebsocketClient {
 
 
     private void test() {
-        connectStomp();
+        connectStomp("ws://192.....");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                sendEchoViaStomp();
+                sendEchoViaStomp("/topic/...","{}");
             }
         }, 200);
     }
-    public void connectStomp() {
-        mStompClient = Stomp.over(WebSocket.class, "ws://192.168.1.83:80/youqing");
+
+    /**
+     *
+     * @param uri "ws://192.168.1.83:80/topic"
+     */
+    public void connectStomp(String uri) {
+        mStompClient = Stomp.over(WebSocket.class, uri);
 
         mStompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
@@ -61,9 +66,9 @@ public class StompWebsocketClient {
         mStompClient.connect();
     }
 
-    public void sendEchoViaStomp() {
+    public void sendEchoViaStomp(String destination,String jsonParam) {
         Log.d(TAG,"开始发送");
-        mStompClient.send("/topic/test", "{}")
+        mStompClient.send(destination, jsonParam)
                 .compose(applySchedulers())
                 .subscribe(aVoid -> {
                     Log.d(TAG, "STOMP echo send successfully");

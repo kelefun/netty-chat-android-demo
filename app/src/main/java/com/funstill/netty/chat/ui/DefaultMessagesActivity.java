@@ -12,7 +12,9 @@ import com.funstill.generator.greendao.dao.UserDataDao;
 import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.generator.greendao.entity.UserData;
 import com.funstill.netty.chat.R;
+import com.funstill.netty.chat.api.UserApi;
 import com.funstill.netty.chat.config.Const;
+import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.fixtures.MessagesFixtures;
 import com.funstill.netty.chat.model.User;
 import com.funstill.netty.chat.model.chat.ChatMessage;
@@ -24,11 +26,13 @@ import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.protobuf.CommonMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AppUtils;
+import com.funstill.netty.chat.utils.RetrofitUtil;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.netty.channel.Channel;
+import retrofit2.Call;
 
 public class DefaultMessagesActivity extends BaseMessagesActivity
         implements MessageInput.InputListener,
@@ -94,14 +99,17 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         UserData userData= userDataDao.queryBuilder()
                 .where(UserDataDao.Properties.UserId.eq(userId)).build().unique();
         //查不到再从服务器查
-
         if(userData==null){
-
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("userId", DefaultMessagesActivity.senderId);
             parameters.put("friendId", userId);
-
-            //TODO 同步请求
+            UserApi api= RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(UserApi.class);
+            Call<ChatUser> call=api.getUser(userId);
+            try {
+                call.execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //将查询结果保存到本机
 
