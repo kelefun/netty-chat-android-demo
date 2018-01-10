@@ -62,7 +62,9 @@ public class ChatMessage implements IMessage,
     public String getStatus() {
         return "Sent";
     }
-
+    public void setUser(User user ) {
+        this.user=user;
+    }
     public void setText(String text) {
         this.text = text;
     }

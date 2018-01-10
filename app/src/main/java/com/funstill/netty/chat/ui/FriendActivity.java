@@ -101,15 +101,16 @@ public class FriendActivity extends AppCompatActivity {
 //                Toast.makeText(FriendActivity.this,
 //                        "点击事件被触发,位置：" + position+itemList.get(position).getNickname(), Toast.LENGTH_SHORT).show();
                 //查询出会话id
+                Long friendId = itemList.get(position).getFriendUserId();
                 DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
                 MessageDataDao messageDataDao = daoSession.getMessageDataDao();
-                Long friendId = itemList.get(position).getFriendUserId();
                 QueryBuilder<MessageData> queryBuilder = messageDataDao.queryBuilder()
                         .where(MessageDataDao.Properties.SenderId.eq(friendId));
                 queryBuilder.join(DialogData.class, DialogDataDao.Properties.Id)
                         .where(DialogDataDao.Properties.DialogType.eq(DialogTypeEnum.PRIVATE_DIALOG.getIndex()));
                 MessageData messageData = queryBuilder.limit(1).build().unique();
-                DefaultMessagesActivity.open(FriendActivity.this, messageData == null ? null : messageData.getDialogId());
+                DefaultMessagesActivity.open(FriendActivity.this,
+                        messageData==null?null:messageData.getDialogId(), friendId);
                 finish();
             }
         });

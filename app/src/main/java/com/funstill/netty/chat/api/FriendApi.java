@@ -7,6 +7,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -17,6 +18,6 @@ public interface FriendApi {
     @GET("friend/list")
     Call<List<ChatFriend>> getFriendList(@QueryMap Map<String, Object> maps);
     @GET("friend/detail")
-    Call<ChatFriend> getFriendDetail(@QueryMap Map<String, Object> maps);
+    Call<ChatFriend> getFriendDetail(@Query("userId") Long userId,@Query("friendId") Long friendId);
 
 }

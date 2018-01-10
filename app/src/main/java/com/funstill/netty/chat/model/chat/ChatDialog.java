@@ -3,7 +3,6 @@ package com.funstill.netty.chat.model.chat;
 import com.funstill.netty.chat.model.BaseModel;
 import com.funstill.netty.chat.model.User;
 import com.stfalcon.chatkit.commons.models.IDialog;
-import com.stfalcon.chatkit.commons.models.IMessage;
 
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
  * Created by liukaiyang on 2017/12/21.
  */
 
-public class ChatDialog extends BaseModel implements IDialog {
+public class ChatDialog extends BaseModel implements IDialog<ChatMessage> {
 
     /**
      * 会话对象id(用户id,或群组id)
@@ -61,8 +60,8 @@ public class ChatDialog extends BaseModel implements IDialog {
     }
 
     @Override
-    public void setLastMessage(IMessage message) {
-        this.lastMessage = lastMessage;
+    public void setLastMessage(ChatMessage message) {
+        this.lastMessage = message;
     }
 
     @Override
