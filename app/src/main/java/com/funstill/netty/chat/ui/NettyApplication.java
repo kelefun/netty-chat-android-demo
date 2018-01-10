@@ -8,8 +8,12 @@ import com.funstill.generator.greendao.dao.DaoMaster.DevOpenHelper;
 import com.funstill.generator.greendao.dao.DaoSession;
 import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.netty.NettyClientStarter;
+import com.funstill.netty.chat.websocket.DefaultWebsocketClient;
 
 import org.greenrobot.greendao.database.Database;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by liukaiyang on 2017/12/8.
@@ -41,6 +45,13 @@ public class NettyApplication extends Application {
             @Override
             public void run() {
                 new NettyClientStarter().connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
+                DefaultWebsocketClient c = null; // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+                try {
+                    c = new DefaultWebsocketClient( new URI( "ws://localhost:8887" ));
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                c.connect();
             }
         }).start();
     }

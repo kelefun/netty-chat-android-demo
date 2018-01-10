@@ -13,5 +13,4 @@ public interface UserApi {
 
     @GET("user/detail")
     Call<ChatUser> getUser(@Query("userId") Long userId);
-
 }

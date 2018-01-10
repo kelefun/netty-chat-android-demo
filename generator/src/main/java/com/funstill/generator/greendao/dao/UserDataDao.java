@@ -15,7 +15,7 @@ import com.funstill.generator.greendao.entity.UserData;
 /** 
  * DAO for table "USER_DATA".
 */
-public class UserDataDao extends AbstractDao<UserData, Void> {
+public class UserDataDao extends AbstractDao<UserData, Long> {
 
     public static final String TABLENAME = "USER_DATA";
 
@@ -24,7 +24,7 @@ public class UserDataDao extends AbstractDao<UserData, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property UserId = new Property(0, Long.class, "userId", false, "USER_ID");
+        public final static Property UserId = new Property(0, Long.class, "userId", true, "_id");
         public final static Property Avatar = new Property(1, String.class, "avatar", false, "AVATAR");
         public final static Property Nickname = new Property(2, String.class, "nickname", false, "NICKNAME");
     }
@@ -42,12 +42,9 @@ public class UserDataDao extends AbstractDao<UserData, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER_DATA\" (" + //
-                "\"USER_ID\" INTEGER," + // 0: userId
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: userId
                 "\"AVATAR\" TEXT," + // 1: avatar
                 "\"NICKNAME\" TEXT);"); // 2: nickname
-        // Add Indexes
-        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_USER_DATA_USER_ID ON \"USER_DATA\"" +
-                " (\"USER_ID\" ASC);");
     }
 
     /** Drops the underlying database table. */
@@ -97,8 +94,8 @@ public class UserDataDao extends AbstractDao<UserData, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
@@ -119,20 +116,23 @@ public class UserDataDao extends AbstractDao<UserData, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(UserData entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(UserData entity, long rowId) {
+        entity.setUserId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(UserData entity) {
-        return null;
+    public Long getKey(UserData entity) {
+        if(entity != null) {
+            return entity.getUserId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(UserData entity) {
-        // TODO
-        return false;
+        return entity.getUserId() != null;
     }
 
     @Override

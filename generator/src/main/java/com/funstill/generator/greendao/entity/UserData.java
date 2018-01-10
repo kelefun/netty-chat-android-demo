@@ -1,8 +1,8 @@
 package com.funstill.generator.greendao.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by liukaiyang on 2018/1/2.
@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class UserData {
-    @Index(unique = true)
+    @Id
     private Long userId;
     private String avatar;
     private String nickname;
