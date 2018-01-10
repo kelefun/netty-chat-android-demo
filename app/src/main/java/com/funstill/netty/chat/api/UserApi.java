@@ -2,7 +2,7 @@ package com.funstill.netty.chat.api;
 
 import com.funstill.netty.chat.model.chat.ChatUser;
 
-import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -12,6 +12,6 @@ import retrofit2.http.Query;
 public interface UserApi {
 
     @GET("user/detail")
-    Observable<ChatUser> getUser(@Query("userId") Long userId);
+    Call<ChatUser> getUser(@Query("userId") Long userId);
 
 }

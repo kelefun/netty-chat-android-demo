@@ -5,7 +5,7 @@ import com.funstill.netty.chat.model.chat.ChatFriend;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
@@ -15,8 +15,8 @@ import retrofit2.http.QueryMap;
 public interface FriendApi {
 
     @GET("friend/list")
-    Observable<List<ChatFriend>> getFriendList(@QueryMap Map<String, Object> maps);
+    Call<List<ChatFriend>> getFriendList(@QueryMap Map<String, Object> maps);
     @GET("friend/detail")
-    Observable<ChatFriend> getFriendDetail(@QueryMap Map<String, Object> maps);
+    Call<ChatFriend> getFriendDetail(@QueryMap Map<String, Object> maps);
 
 }

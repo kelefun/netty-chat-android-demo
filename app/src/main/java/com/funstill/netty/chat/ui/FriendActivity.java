@@ -23,6 +23,7 @@ import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.model.chat.ChatFriend;
 import com.funstill.netty.chat.model.enums.DialogTypeEnum;
 import com.funstill.netty.chat.utils.AppUtils;
+import com.funstill.netty.chat.utils.RetrofitUtil;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -30,6 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by liukaiyang on 2017/12/27.
@@ -68,8 +73,21 @@ public class FriendActivity extends AppCompatActivity {
         parameters.clear();
         parameters.put("userId", DefaultMessagesActivity.senderId);
         headers.put("Accept", "application/json");
-//                        itemList = friendList;
-//                        initData();
+        FriendApi friendApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(FriendApi.class);
+        Call<List<ChatFriend>> call = friendApi.getFriendList(parameters);
+        call.enqueue(new Callback<List<ChatFriend>>() {
+            @Override
+            public void onResponse(Call<List<ChatFriend>> call, Response<List<ChatFriend>> response) {
+                itemList = response.body();
+                initData();
+            }
+
+            @Override
+            public void onFailure(Call<List<ChatFriend>> call, Throwable t) {
+
+            }
+        });
+
 
     }
 
