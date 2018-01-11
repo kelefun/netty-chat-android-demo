@@ -3,7 +3,6 @@ package com.funstill.netty.chat.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,7 +30,6 @@ import org.greenrobot.greendao.query.Query;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -73,8 +71,16 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
 
     @Override
     public void onDialogClick(ChatDialog dialog) {
-        //打开聊天会话 //TODO dialog id==null空指针异常
-        DefaultMessagesActivity.open(this,Long.valueOf(dialog.getId()),null);
+        //打开聊天会话
+        //查出好友id
+        if(dialog.getId()==null){
+           throw new IllegalArgumentException("dialogId不能为空");
+        }
+        DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
+        MessageDataDao messageDataDao = daoSession.getMessageDataDao();
+        MessageData messageData=messageDataDao.queryBuilder()
+                .where(MessageDataDao.Properties.DialogId.eq(dialog.getId())).build().unique();
+        DefaultMessagesActivity.open(this, Long.valueOf(dialog.getId()), messageData.getSenderId());
     }
 
     private void initAdapter() {
@@ -97,27 +103,18 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
                 users.add(user);
             }
             ChatDialog chatDialog = new ChatDialog();
+            chatDialog.setId(dialog.getId()+"");
             chatDialog.setUsers(users);//用户头像
             //2查询最近一条消息
             MessageData messageData = messageDataDao.queryBuilder()
                     .where(MessageDataDao.Properties.DialogId.eq(dialog.getId()))
-                    .orderDesc(MessageDataDao.Properties.UpdateDate).limit(1)
+                    .orderDesc(MessageDataDao.Properties.CreateDate).limit(1)
                     .build().unique();
-            if(messageData!=null){
-                ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setCreatedAt(messageData.getCreateDate());
-                chatMessage.setText(messageData.getContent());
-                chatMessage.setUser(getUser(messageData.getSenderId()));//TODO 改ui换成名字
-                chatDialog.setLastMessage(chatMessage);
-            }else{
-                //TODO 下面为测试用代码
-                Log.e("","异常,不应该出现这种情况");
-                ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setCreatedAt(new Date());
-                chatMessage.setText("异常消息");
-                chatMessage.setUser(getUser(messageData.getSenderId()));
-                chatDialog.setLastMessage(chatMessage);
-            }
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setCreatedAt(messageData.getCreateDate());
+            chatMessage.setText(messageData.getContent());
+            chatMessage.setUser(getUser(messageData.getSenderId()));//TODO 改ui换成名字
+            chatDialog.setLastMessage(chatMessage);
             dialogList.add(chatDialog);
 
         }

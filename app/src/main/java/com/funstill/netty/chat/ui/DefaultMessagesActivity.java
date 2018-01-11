@@ -62,7 +62,6 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         }
         dialogId_ = dialogId;
         friendUserId_ = friendUserId;
-
         context.startActivity(new Intent(context, DefaultMessagesActivity.class));
     }
 
@@ -173,6 +172,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         return user;
     }
 
+    //TODO 需要改ui ,如果未加载历史消息,需要上屏到顶部
     @Override
     public boolean onSubmit(CharSequence input) {
         //查询当前登录用户信息
@@ -216,9 +216,19 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                 });
         this.messagesList.setAdapter(super.messagesAdapter);
     }
-
+    //TODO 需要改ui 这是滑动到顶部加载更多..需要初始化历史数据并不只是加载更多
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
+//        Log.d(TAG,"加载历史消息..");
+//        new Handler().postDelayed(new Runnable() { //imitation of internet connection
+//            @Override
+//            public void run() {
+//               loadMore();
+//            }
+//        }, 1000);
+    }
+
+    private void loadMore(){
         if (dialogId_ != null) {//之前有聊过天
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
             MessageDataDao messageDataDao = daoSession.getMessageDataDao();
@@ -237,4 +247,5 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
             messagesAdapter.addToEnd(messages, false);
         }
     }
+
 }

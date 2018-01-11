@@ -59,8 +59,8 @@
                     android:hint="用户名"
                     android:maxLength="11"
                     android:maxLines="1"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/white" />
 
                 <FrameLayout
                     android:id="@+id/fr_username_delete"
@@ -94,8 +94,8 @@
                     android:hint="密码"
 
                     android:maxLines="1"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#FFFFFF" />
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/white" />
 
                 <FrameLayout
                     android:id="@+id/fr_pass_delete"

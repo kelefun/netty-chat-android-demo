@@ -101,18 +101,15 @@ public abstract class BaseMessagesActivity extends AppCompatActivity
 //    }
 
     private MessagesListAdapter.Formatter<ChatMessage> getMessageStringFormatter() {
-        return new MessagesListAdapter.Formatter<ChatMessage>() {
-            @Override
-            public String format(ChatMessage message) {
-                String createdAt = new SimpleDateFormat("MMM d, EEE 'at' h:mm a", Locale.getDefault())
-                        .format(message.getCreatedAt());
+        return message -> {
+            String createdAt = new SimpleDateFormat("MMM d, EEE 'at' h:mm a", Locale.getDefault())
+                    .format(message.getCreatedAt());
 
-                String text = message.getText();
-                if (text == null) text = "[attachment]";
+            String text = message.getText();
+            if (text == null) text = "[attachment]";
 
-                return String.format(Locale.getDefault(), "%s: %s (%s)",
-                        message.getUser().getName(), text, createdAt);
-            }
+            return String.format(Locale.getDefault(), "%s: %s (%s)",
+                    message.getUser().getName(), text, createdAt);
         };
     }
 }
