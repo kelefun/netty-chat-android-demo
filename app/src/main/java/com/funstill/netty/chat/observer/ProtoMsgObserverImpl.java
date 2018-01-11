@@ -15,6 +15,6 @@ public class ProtoMsgObserverImpl implements ProtoMsgObserver {
 
     @Override
     public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
-        Log.i("ProtoMsgObserverImpl",msg.getProtoType()+"=收到消息proto-type");
+        Log.i("ProtoMsgObserverImpl",msg.getProtoType()+"=proto-type,收到消息...");
     }
 }

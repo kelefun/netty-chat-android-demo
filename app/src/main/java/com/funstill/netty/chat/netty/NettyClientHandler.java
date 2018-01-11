@@ -20,7 +20,7 @@ import io.netty.handler.timeout.IdleStateEvent;
  */
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public static Channel channel;
-    public final String TAG="netty";
+    public final String TAG="NettyClientHandler";
     public static ProtoMsgObservable msgObservable=new ProtoMsgObservable();
     static {
         msgObservable.addObserver(new ProtoMsgObserverImpl());
@@ -28,7 +28,12 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         channel = ctx.channel();
-        sendMsg("Android客户端连接,设备=" + Build.MODEL+",SERIAL=" + Build.SERIAL);
+        Log.d(TAG,"Android客户端连接,设备=" + Build.MODEL+",SERIAL=" + Build.SERIAL);
+    }
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        channel = ctx.channel();
+        Log.e(TAG,"连接已中断");
     }
 
     @Override
@@ -41,7 +46,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.close();
-        Log.e("连接异常exceptionCaught=", cause.getMessage());
+        Log.e(TAG,"连接异常exceptionCaught="+cause.getMessage());
     }
 
     @Override

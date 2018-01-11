@@ -33,7 +33,6 @@ import com.funstill.netty.chat.protobuf.CommonMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.funstill.netty.chat.utils.RetrofitUtil;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
@@ -85,11 +84,11 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
                     if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG.getIndex()) {//别人发来的消息
 
-                        CommonMsg.Content res = saveMsg(msg);
+                        CommonMsg.Content res = saveMsg(msg,1);
                         if (res != null) {
                             if (res.getMsgType() == MsgTypeEnum.TEXT.getIndex()) {
                                 User user = getUser(res.getSender());
-                                Log.d(TAG, "收到来自" + user.getName() + "的消息...");
+                                Log.d(TAG, "收到来自<" + user.getName() + ">的消息...");
                                 ChatMessage chatKitMsg = new ChatMessage(msg.getUuid(), user, res.getContent(), new Date());
                                 messagesAdapter.addToStart(chatKitMsg, true);
                             }//TODO 图片
@@ -97,7 +96,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                     } else if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG_ECHO.getIndex()) {//自己发送的消息
                         //保存消息
                         Log.d(TAG, "发送消息成功,收到回传消息,准备保存数据到本机...");
-                        saveMsg(msg);
+                        saveMsg(msg,2);
 
                     }
                 }
@@ -107,14 +106,14 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     }
 
 
-    private CommonMsg.Content saveMsg(ProtoMsg.Content msg) {
+    private CommonMsg.Content saveMsg(ProtoMsg.Content msg,int fromType) {
         try {
             CommonMsg.Content res = CommonMsg.Content.parseFrom(msg.getContent());
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
             DialogDataDao dialogDataDao=daoSession.getDialogDataDao();
             DialogData dialogData;
             if(dialogId_==null){//第一次聊天
-                User friend=getUser(res.getSender());
+                User friend=getUser(fromType==1?res.getSender():res.getReceiver());
                 dialogData=new DialogData();
                 dialogData.setDialogName(friend.getName());
                 dialogData.setDialogType(DialogTypeEnum.PRIVATE_DIALOG.getIndex());
@@ -133,7 +132,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
             dialogData.setLastMsgId(messageData.getId());
             //TODO 更新会话的最近一条消息
             return res;
-        } catch (InvalidProtocolBufferException e) {
+        } catch (Exception e) {
             Log.e(TAG, "保存聊天消息异常" + e.getMessage());
             e.printStackTrace();
             return null;
@@ -151,9 +150,9 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
             userData = new UserData();
             UserApi userApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(UserApi.class);
             FriendApi friendApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(FriendApi.class);
-            Call<ChatUser> call = userApi.getUser(userId);
-            Call<ChatFriend> callFriend = friendApi.getFriendDetail(Long.valueOf(DefaultMessagesActivity.senderId), userId);
             try {
+                Call<ChatUser> call = userApi.getUser(userId);
+                Call<ChatFriend> callFriend = friendApi.getFriendDetail(Long.valueOf(senderId), userId);
                 ChatUser chatUser = call.execute().body();
                 ChatFriend chatFriend = callFriend.execute().body();
                 userData.setAvatar(chatUser.getAvatar());
