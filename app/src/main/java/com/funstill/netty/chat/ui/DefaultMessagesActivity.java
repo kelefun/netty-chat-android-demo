@@ -125,6 +125,12 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     }
 
 
+    /**
+     *
+     * @param msg
+     * @param fromType 1别人发来的消息,2自己发出去的消息
+     * @return
+     */
     private CommonMsg.Content saveMsg(ProtoMsg.Content msg, int fromType) {
         try {
             CommonMsg.Content res = CommonMsg.Content.parseFrom(msg.getContent());

@@ -60,7 +60,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
             } else if (event.state() == IdleState.WRITER_IDLE) {
                 //写超时
                 Log.e(TAG, "===服务端=== （Reader_IDLE 写超时）");
-                ctx.channel().close();
+  //              ctx.channel().writeAndFlush();//TODO 发送心跳包
             } else if (event.state() == IdleState.ALL_IDLE) {
                 //总超时
                 Log.e(TAG, "===服务端=== （ALL_IDLE 总超时）");
