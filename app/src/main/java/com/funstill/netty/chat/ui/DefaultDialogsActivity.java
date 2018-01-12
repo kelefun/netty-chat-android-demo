@@ -75,7 +75,7 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
     }
 
     private void initAdapter() {
-        super.dialogsAdapter = new DialogsListAdapter<>(R.layout.item_custom_dialog, super.imageLoader);
+        super.dialogsAdapter = new DialogsListAdapter<>(R.layout.item_dialog, super.imageLoader);
         // 查询本地历史会话
         DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
         DialogDataDao dialogDataDao = daoSession.getDialogDataDao();
