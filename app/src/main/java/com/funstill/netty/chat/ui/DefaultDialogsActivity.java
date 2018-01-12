@@ -84,27 +84,27 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
         Query<DialogData> dialogDataQuery = dialogDataDao.queryBuilder().orderDesc(DialogDataDao.Properties.UpdateDate).build();
         List<DialogData> dialogDataList = dialogDataQuery.list();
         List<ChatDialog> dialogList = new ArrayList<>();
-        for (DialogData dialog : dialogDataList) {
-            //1查询参与会话的用户
-            String[] userIds = dialog.getUsers().split(",");
-            ArrayList<User> users = new ArrayList<>(userIds.length);
-            for (String userId : userIds) {
-                User user = getUser(Long.valueOf(userId));
-                users.add(user);
-            }
+        for (DialogData dialogData : dialogDataList) {
             ChatDialog chatDialog = new ChatDialog();
-            chatDialog.setId(dialog.getId() + "");
-            chatDialog.setUsers(users);//用户头像
+            chatDialog.setId(dialogData.getId() + "");
+            String[] userIds = dialogData.getUsers().split(",");
+            if(userIds.length>1){//群聊
+                //TODO 处理群聊头像,群名称
+            }else {//私聊
+                User friend=getUser(Long.valueOf(userIds[0]));
+                chatDialog.setDialogPhoto(friend.getAvatar());
+                chatDialog.setDialogName(friend.getName());
+            }
             //2查询最近一条消息
             MessageData messageData = messageDataDao.queryBuilder()
-                    .where(MessageDataDao.Properties.DialogId.eq(dialog.getId()))
+                    .where(MessageDataDao.Properties.DialogId.eq(dialogData.getId()))
                     .orderDesc(MessageDataDao.Properties.CreateDate).limit(1)
                     .build().unique();
-            ChatMessage chatMessage = new ChatMessage();
+            ChatMessage chatMessage= new ChatMessage();
             chatMessage.setCreatedAt(messageData.getCreateDate());
             chatMessage.setText(messageData.getContent());
-            chatMessage.setUser(getUser(messageData.getSenderId()));//TODO 改ui换成名字
             chatDialog.setLastMessage(chatMessage);
+            chatDialog.setUnreadCount(3);
             dialogList.add(chatDialog);
 
         }

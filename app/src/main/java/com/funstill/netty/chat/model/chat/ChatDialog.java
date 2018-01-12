@@ -76,4 +76,12 @@ public class ChatDialog extends BaseModel implements IDialog<ChatMessage> {
     public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
+
+    public void setDialogPhoto(String dialogPhoto) {
+        this.dialogPhoto = dialogPhoto;
+    }
+
+    public void setDialogName(String dialogName) {
+        this.dialogName = dialogName;
+    }
 }
