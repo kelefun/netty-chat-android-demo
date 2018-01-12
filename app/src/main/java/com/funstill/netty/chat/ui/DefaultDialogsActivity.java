@@ -14,25 +14,16 @@ import com.funstill.generator.greendao.entity.DialogData;
 import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.generator.greendao.entity.UserData;
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.api.FriendApi;
-import com.funstill.netty.chat.api.UserApi;
-import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.model.User;
 import com.funstill.netty.chat.model.chat.ChatDialog;
-import com.funstill.netty.chat.model.chat.ChatFriend;
 import com.funstill.netty.chat.model.chat.ChatMessage;
-import com.funstill.netty.chat.model.chat.ChatUser;
-import com.funstill.netty.chat.utils.RetrofitUtil;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
 import org.greenrobot.greendao.query.Query;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
 
 public class DefaultDialogsActivity extends BaseDialogsActivity {
 
@@ -73,13 +64,13 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
     public void onDialogClick(ChatDialog dialog) {
         //打开聊天会话
         //查出好友id
-        if(dialog.getId()==null){
-           throw new IllegalArgumentException("dialogId不能为空");
+        if (dialog.getId() == null) {
+            throw new IllegalArgumentException("dialogId不能为空");
         }
         DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
         MessageDataDao messageDataDao = daoSession.getMessageDataDao();
-        MessageData messageData=messageDataDao.queryBuilder()
-                .where(MessageDataDao.Properties.DialogId.eq(dialog.getId())).build().unique();
+        MessageData messageData = messageDataDao.queryBuilder()
+                .where(MessageDataDao.Properties.DialogId.eq(dialog.getId())).limit(1).build().unique();
         DefaultMessagesActivity.open(this, Long.valueOf(dialog.getId()), messageData.getSenderId());
     }
 
@@ -88,7 +79,6 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
         // 查询本地历史会话
         DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
         DialogDataDao dialogDataDao = daoSession.getDialogDataDao();
-        UserDataDao userDataDao = daoSession.getUserDataDao();
         MessageDataDao messageDataDao = daoSession.getMessageDataDao();
 
         Query<DialogData> dialogDataQuery = dialogDataDao.queryBuilder().orderDesc(DialogDataDao.Properties.UpdateDate).build();
@@ -103,7 +93,7 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
                 users.add(user);
             }
             ChatDialog chatDialog = new ChatDialog();
-            chatDialog.setId(dialog.getId()+"");
+            chatDialog.setId(dialog.getId() + "");
             chatDialog.setUsers(users);//用户头像
             //2查询最近一条消息
             MessageData messageData = messageDataDao.queryBuilder()
@@ -128,31 +118,14 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
     }
 
     private User getUser(Long userId) {
-        //先从本地数据库查
         DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
         UserDataDao userDataDao = daoSession.getUserDataDao();
         UserData userData = userDataDao.queryBuilder()
                 .where(UserDataDao.Properties.UserId.eq(userId)).build().unique();
-        //查不到再从服务器查
         if (userData == null) {
             userData = new UserData();
-            UserApi userApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(UserApi.class);
-            FriendApi friendApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(FriendApi.class);
-            Call<ChatUser> call = userApi.getUser(userId);
-            Call<ChatFriend> callFriend = friendApi.getFriendDetail(Long.valueOf(DefaultMessagesActivity.senderId), userId);
-            try {
-                ChatUser chatUser = call.execute().body();
-                ChatFriend chatFriend = callFriend.execute().body();
-                userData.setAvatar(chatUser.getAvatar());
-                if (chatFriend != null) {
-                    userData.setNickname(chatFriend.getNickname());
-                }
-                userData.setUserId(chatUser.getUserId());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //将查询结果保存到本机
-            userDataDao.insert(userData);
+            userData.setNickname("没查到..bug");
+            userData.setAvatar("http://i.imgur.com/pv1tBmT.png");
         }
         //返回查询结果
         User user = new User(userId + "", userData.getNickname(), userData.getAvatar(), true);

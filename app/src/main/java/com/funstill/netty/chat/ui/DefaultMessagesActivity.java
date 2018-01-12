@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -50,6 +52,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         MessageInput.AttachmentsListener {
     private SharedPreferences sp;
     private final String TAG = "DefaultMessagesActivity";
+    private final int RECEIVE_MSG = 1;
     private static Long dialogId_, friendUserId_;
 
     private ProtoMsgObserver commonMsgObserver = null;
@@ -77,6 +80,18 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         input.setInputListener(this);
     }
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case RECEIVE_MSG:{
+                    messagesAdapter.addToStart((ChatMessage) msg.obj, true);
+                }
+            }
+
+        }
+    };
+
     private void initObserver() {
         if (commonMsgObserver == null) {
             commonMsgObserver = new ProtoMsgObserver() {
@@ -84,19 +99,23 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
                     if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG.getIndex()) {//别人发来的消息
 
-                        CommonMsg.Content res = saveMsg(msg,1);
+                        CommonMsg.Content res = saveMsg(msg, 1);
                         if (res != null) {
                             if (res.getMsgType() == MsgTypeEnum.TEXT.getIndex()) {
                                 User user = getUser(res.getSender());
                                 Log.d(TAG, "收到来自<" + user.getName() + ">的消息...");
                                 ChatMessage chatKitMsg = new ChatMessage(msg.getUuid(), user, res.getContent(), new Date());
-                                messagesAdapter.addToStart(chatKitMsg, true);
+                                Message handlerMsg = new Message();
+                                handlerMsg.obj = chatKitMsg;
+                                handlerMsg.what = RECEIVE_MSG;
+                                handler.sendMessage(handlerMsg);
+
                             }//TODO 图片
                         }
                     } else if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG_ECHO.getIndex()) {//自己发送的消息
                         //保存消息
                         Log.d(TAG, "发送消息成功,收到回传消息,准备保存数据到本机...");
-                        saveMsg(msg,2);
+                        saveMsg(msg, 2);
 
                     }
                 }
@@ -106,23 +125,23 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     }
 
 
-    private CommonMsg.Content saveMsg(ProtoMsg.Content msg,int fromType) {
+    private CommonMsg.Content saveMsg(ProtoMsg.Content msg, int fromType) {
         try {
             CommonMsg.Content res = CommonMsg.Content.parseFrom(msg.getContent());
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
-            DialogDataDao dialogDataDao=daoSession.getDialogDataDao();
+            DialogDataDao dialogDataDao = daoSession.getDialogDataDao();
             DialogData dialogData;
-            if(dialogId_==null){//第一次聊天
-                User friend=getUser(fromType==1?res.getSender():res.getReceiver());
-                dialogData=new DialogData();
+            if (dialogId_ == null) {//第一次聊天
+                User friend = getUser(fromType == 1 ? res.getSender() : res.getReceiver());
+                dialogData = new DialogData();
                 dialogData.setDialogName(friend.getName());
                 dialogData.setDialogType(DialogTypeEnum.PRIVATE_DIALOG.getIndex());
                 dialogData.setUnreadCount(0);
                 dialogData.setUsers(friend.getId().toString());
-                long dialogId=dialogDataDao.insert(dialogData);
-                dialogId_=dialogId;
-            }else {
-                dialogData=  dialogDataDao.queryBuilder().where(DialogDataDao.Properties.Id.eq(dialogId_)).build().unique();
+                long dialogId = dialogDataDao.insert(dialogData);
+                dialogId_ = dialogId;
+            } else {
+                dialogData = dialogDataDao.queryBuilder().where(DialogDataDao.Properties.Id.eq(dialogId_)).build().unique();
             }
 
             MessageDataDao messageDataDao = daoSession.getMessageDataDao();
@@ -215,6 +234,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
                 });
         this.messagesList.setAdapter(super.messagesAdapter);
     }
+
     //TODO 需要改ui 这是滑动到顶部加载更多..需要初始化历史数据并不只是加载更多
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
@@ -227,7 +247,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
 //        }, 1000);
     }
 
-    private void loadMore(){
+    private void loadMore() {
         if (dialogId_ != null) {//之前有聊过天
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
             MessageDataDao messageDataDao = daoSession.getMessageDataDao();
