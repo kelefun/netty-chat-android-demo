@@ -38,7 +38,8 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         channel = ctx.channel();
-        Log.e(TAG, "连接已中断");
+        Log.e(TAG, "连接已中断,尝试重连");
+        NettyClientStarter.getInstance().threadRun();
     }
 
     @Override

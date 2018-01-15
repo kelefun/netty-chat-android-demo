@@ -76,8 +76,9 @@ class RecyclerScrollMoreListener
                 previousTotalItemCount = totalItemCount;
             }
 
-            int visibleThreshold = 5;
-            if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+            //可能有bug,现在的2 包括1个时间布局item和索引是从0开始
+            if (!loading && lastVisibleItemPosition+2== totalItemCount) {
+                //TODO 加载更多时 ui需要给个提示
                 currentPage++;
                 loadMoreListener.onLoadMore(currentPage, totalItemCount);
                 loading = true;

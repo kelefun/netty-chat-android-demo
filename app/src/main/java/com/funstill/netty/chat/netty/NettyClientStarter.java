@@ -42,14 +42,15 @@ public class NettyClientStarter {
         return singleton;
     }
 
-    public void threadRun(){
+    public void threadRun() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-               connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
+                connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
             }
         }).start();
     }
+
     public void connect(int port, String host) {
         try {
             if (bootstrap == null) {
@@ -66,6 +67,7 @@ public class NettyClientStarter {
         bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)//超时时间为3秒,默认30秒在DefaultChannelConfig.java中配置
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
@@ -81,8 +83,12 @@ public class NettyClientStarter {
     }
 
     private void doConnect(int port, String host) {
-        if (channel != null && channel.isActive()) {
-            return;
+        if (channel != null) {
+            if(channel.isActive()){
+                return;
+            }else {
+                channel.close();
+            }
         }
         final ChannelFuture channelFuture = bootstrap.connect(host, port);
         channelFuture.addListener(new ChannelFutureListener() {

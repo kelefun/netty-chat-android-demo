@@ -35,7 +35,6 @@ public abstract class BaseMessagesActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, String url) {
@@ -89,16 +88,6 @@ public abstract class BaseMessagesActivity extends AppCompatActivity
         menu.findItem(R.id.action_copy).setVisible(count > 0);
     }
 
-//    protected void loadMessages() {
-//        new Handler().postDelayed(new Runnable() { //imitation of internet connection
-//            @Override
-//            public void run() {
-//                ArrayList<ChatMessage> messages = MessagesFixtures.getMessages(lastLoadedDate);
-//                lastLoadedDate = messages.get(messages.size() - 1).getCreatedAt();
-//                messagesAdapter.addToEnd(messages, false);
-//            }
-//        }, 1000);
-//    }
 
     private MessagesListAdapter.Formatter<ChatMessage> getMessageStringFormatter() {
         return message -> {

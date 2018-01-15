@@ -17,15 +17,10 @@ import com.funstill.generator.greendao.entity.DialogData;
 import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.generator.greendao.entity.UserData;
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.api.FriendApi;
-import com.funstill.netty.chat.api.UserApi;
 import com.funstill.netty.chat.config.Const;
-import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.fixtures.MessagesFixtures;
 import com.funstill.netty.chat.model.User;
-import com.funstill.netty.chat.model.chat.ChatFriend;
 import com.funstill.netty.chat.model.chat.ChatMessage;
-import com.funstill.netty.chat.model.chat.ChatUser;
 import com.funstill.netty.chat.model.enums.DialogTypeEnum;
 import com.funstill.netty.chat.model.enums.MsgTypeEnum;
 import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
@@ -34,26 +29,24 @@ import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.protobuf.CommonMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AppUtils;
-import com.funstill.netty.chat.utils.RetrofitUtil;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import io.netty.channel.Channel;
-import retrofit2.Call;
 
 public class DefaultMessagesActivity extends BaseMessagesActivity
         implements MessageInput.InputListener,
         MessageInput.AttachmentsListener {
     private SharedPreferences sp;
     private final String TAG = "DefaultMessagesActivity";
-    private final int RECEIVE_MSG = 1;
+    private final int RECEIVE_MSG = 1, pageSize = 8;
     private static Long dialogId_, friendUserId_;
+    private boolean loadmore = true;
 
     private ProtoMsgObserver commonMsgObserver = null;
     private MessagesList messagesList;
@@ -67,7 +60,6 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         context.startActivity(new Intent(context, DefaultMessagesActivity.class));
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,13 +70,15 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         initObserver();
         MessageInput input = (MessageInput) findViewById(R.id.input);
         input.setInputListener(this);
+        loadHistory(1);
     }
+
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case RECEIVE_MSG:{
+                case RECEIVE_MSG: {
                     messagesAdapter.addToStart((ChatMessage) msg.obj, true);
                 }
             }
@@ -97,6 +91,7 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
             commonMsgObserver = new ProtoMsgObserver() {
                 @Override
                 public void handleProtoMsg(Channel channel, ProtoMsg.Content msg) {
+                    Log.i(TAG, "uuid=" + msg.getUuid());
                     if (msg.getProtoType() == ProtoTypeEnum.COMMON_MSG.getIndex()) {//别人发来的消息
 
                         CommonMsg.Content res = saveMsg(msg, 1);
@@ -126,7 +121,6 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
 
 
     /**
-     *
      * @param msg
      * @param fromType 1别人发来的消息,2自己发出去的消息
      * @return
@@ -173,23 +167,8 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         //查不到再从服务器查
         if (userData == null) {
             userData = new UserData();
-            UserApi userApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(UserApi.class);
-            FriendApi friendApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(FriendApi.class);
-            try {
-                Call<ChatUser> call = userApi.getUser(userId);
-                Call<ChatFriend> callFriend = friendApi.getFriendDetail(Long.valueOf(senderId), userId);
-                ChatUser chatUser = call.execute().body();
-                ChatFriend chatFriend = callFriend.execute().body();
-                userData.setAvatar(chatUser.getAvatar());
-                if (chatFriend != null) {
-                    userData.setNickname(chatFriend.getNickname());
-                }
-                userData.setUserId(chatUser.getUserId());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //将查询结果保存到本机
-            userDataDao.insert(userData);
+            userData.setNickname("没查到..bug");
+            userData.setAvatar("http://i.imgur.com/pv1tBmT.png");
         }
         //返回查询结果
         User user = new User(userId + "", userData.getNickname(), userData.getAvatar(), true);
@@ -241,36 +220,33 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
         this.messagesList.setAdapter(super.messagesAdapter);
     }
 
-    //TODO 需要改ui 这是滑动到顶部加载更多..需要初始化历史数据并不只是加载更多
+    //TODO 有时间看下加载触发机制,这里有点问题
     @Override
     public void onLoadMore(int page, int totalItemsCount) {
-//        Log.d(TAG,"加载历史消息..");
-//        new Handler().postDelayed(new Runnable() { //imitation of internet connection
-//            @Override
-//            public void run() {
-//               loadMore();
-//            }
-//        }, 1000);
+        Log.i(TAG, "参数=" + page + "," + totalItemsCount);
+        loadHistory(page+1);//因为初始化数据的时候已经加载第一页了
     }
 
-    private void loadMore() {
-        if (dialogId_ != null) {//之前有聊过天
+    private void loadHistory(int page) {
+
+        if (loadmore && dialogId_ != null) {
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
             MessageDataDao messageDataDao = daoSession.getMessageDataDao();
             List<MessageData> messageDataList = messageDataDao.queryBuilder()
                     .where(MessageDataDao.Properties.DialogId.eq(dialogId_))
-                    .orderDesc(MessageDataDao.Properties.UpdateDate).list();
+                    .orderDesc(MessageDataDao.Properties.UpdateDate).limit(pageSize).offset((page - 1) * pageSize).list();
 
-            ArrayList<ChatMessage> messages = new ArrayList<>(messageDataList.size());
-
-            for (MessageData messageData : messageDataList) {
-                User user = getUser(messageData.getSenderId());
-                ChatMessage message = new ChatMessage(messageData.getUuid(), user,
-                        messageData.getContent(), messageData.getCreateDate());
-                messages.add(message);
+            loadmore = messageDataList.size() == pageSize;
+            if (messageDataList.size() > 0) {
+                ArrayList<ChatMessage> messages = new ArrayList<>(messageDataList.size());
+                for (MessageData messageData : messageDataList) {
+                    User user = getUser(messageData.getSenderId());
+                    ChatMessage message = new ChatMessage(messageData.getUuid(), user,
+                            messageData.getContent(), messageData.getCreateDate());
+                    messages.add(message);
+                }
+                messagesAdapter.addToEnd(messages, false);
             }
-            messagesAdapter.addToEnd(messages, false);
         }
     }
-
 }
