@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.config.Const;
+import com.funstill.netty.chat.netty.NettyClientStarter;
 
 public class MainActivity extends FragmentActivity {
     private SharedPreferences sp;
@@ -18,11 +19,12 @@ public class MainActivity extends FragmentActivity {
         String userId = sp.getString(Const.LOGIN_USER_ID, "");
         if (!TextUtils.isEmpty(userId)) {
             DefaultMessagesActivity.senderId=userId;
-            //TODO 建立连接
+            NettyClientStarter.getInstance().threadRun();
             DefaultDialogsActivity.open(MainActivity.this);
         }else {
             LoginActivity.start(MainActivity.this);
         }
+        finish();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.funstill.netty.chat.netty;
 
 import android.util.Log;
 
+import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 
 import java.util.concurrent.TimeUnit;
@@ -32,7 +33,23 @@ public class NettyClientStarter {
     private Bootstrap bootstrap;
     private final String TAG = "NettyClientStarter";
     private static int retryCount = 0;//已尝试重连次数,重连成功后归零
+    private static NettyClientStarter singleton = null;
 
+    public static NettyClientStarter getInstance() {
+        if (singleton == null) {
+            singleton = new NettyClientStarter();
+        }
+        return singleton;
+    }
+
+    public void threadRun(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+               connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
+            }
+        }).start();
+    }
     public void connect(int port, String host) {
         try {
             if (bootstrap == null) {
@@ -53,12 +70,12 @@ public class NettyClientStarter {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new IdleStateHandler(0, 8, 0));
                         ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
                         ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
                         ch.pipeline().addLast(new ProtobufDecoder(ProtoMsg.Content.getDefaultInstance()));
                         ch.pipeline().addLast(new ProtobufEncoder());
                         ch.pipeline().addLast(new NettyClientHandler());
-                        ch.pipeline().addLast(new IdleStateHandler(0,4,0,TimeUnit.SECONDS));
                     }
                 });
     }
@@ -76,15 +93,15 @@ public class NettyClientStarter {
                     channel = future.channel();
                     retryCount = 0;
                 } else {
-                    if (retryCount < 10) {
+                    if (retryCount < 6) {
                         retryCount++;
-                        Log.i(TAG, "连接失败," + retryCount * 5 + "秒后将尝试重连...这是第[" + retryCount + "]次重连");
+                        Log.i(TAG, "连接失败," + (2 << retryCount) + "秒后将尝试重连,这是第[" + retryCount + "]次重连");
                         future.channel().eventLoop().schedule(new Runnable() {
                             @Override
                             public void run() {
                                 doConnect(port, host);
                             }
-                        }, retryCount * 5, TimeUnit.SECONDS);
+                        }, 2 << retryCount, TimeUnit.SECONDS);
                     }
                 }
             }

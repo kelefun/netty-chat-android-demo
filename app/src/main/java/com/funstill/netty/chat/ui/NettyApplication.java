@@ -6,7 +6,6 @@ import android.support.multidex.MultiDex;
 import com.funstill.generator.greendao.dao.DaoMaster;
 import com.funstill.generator.greendao.dao.DaoMaster.DevOpenHelper;
 import com.funstill.generator.greendao.dao.DaoSession;
-import com.funstill.netty.chat.config.ServerConfig;
 import com.funstill.netty.chat.netty.NettyClientStarter;
 
 import org.greenrobot.greendao.database.Database;
@@ -24,7 +23,7 @@ public class NettyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        connectServer();
+        NettyClientStarter.getInstance().threadRun();
         initDao();
 
     }
@@ -36,12 +35,5 @@ public class NettyApplication extends Application {
         Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
     }
-    public void connectServer() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new NettyClientStarter().connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
-            }
-        }).start();
-    }
+
 }
