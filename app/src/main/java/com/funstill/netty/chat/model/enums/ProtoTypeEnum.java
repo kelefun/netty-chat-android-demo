@@ -10,7 +10,8 @@ public enum ProtoTypeEnum {
     LOGIN_REQUEST_MSG(3, "登录请求"),
     LOGIN_RESPONSE_MSG(4, "登录响应"),
     LOGOUT_REQUEST_MSG(5, "注销"),
-    HEART_BEAT_PING(6, "心跳ping包");
+    HEART_BEAT_PING(6, "心跳ping包"),
+    ONLINE_REQUEST_MSG(7,"上线请求");
     private int index;
     private String name;
 

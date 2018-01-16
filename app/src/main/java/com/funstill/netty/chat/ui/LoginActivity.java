@@ -26,8 +26,8 @@ import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.permission.MPermission;
 import com.funstill.netty.chat.permission.annotation.OnMPermissionDenied;
 import com.funstill.netty.chat.permission.annotation.OnMPermissionNeverAskAgain;
-import com.funstill.netty.chat.protobuf.AuthMsg;
 import com.funstill.netty.chat.protobuf.AuthResponseMsg;
+import com.funstill.netty.chat.protobuf.LoginMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AccountStoreUtil;
 import com.funstill.netty.chat.utils.AppUtils;
@@ -84,7 +84,6 @@ public class LoginActivity extends FragmentActivity {
                             if (res.getCode() == ResponseEnum.SUCCESS.getCode()) {
                                 //如果登录成功保存登录信息
                                 saveMyInfo(res.getExtra());
-                                //跳转
                                 DefaultMessagesActivity.senderId = res.getUserId();
                                 DefaultDialogsActivity.open(LoginActivity.this);
                                 finish();//结束此页面
@@ -142,7 +141,7 @@ public class LoginActivity extends FragmentActivity {
                     return;
                 }
                 //发送登录消息
-                AuthMsg.Content.Builder authBuilder = AuthMsg.Content.newBuilder();
+                LoginMsg.Content.Builder authBuilder = LoginMsg.Content.newBuilder();
                 authBuilder.setUsername(mUsernameEdit.getText().toString());
                 authBuilder.setPassword(mPasswordEdit.getText().toString());
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();

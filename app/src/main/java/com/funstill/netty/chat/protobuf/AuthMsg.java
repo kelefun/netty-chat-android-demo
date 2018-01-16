@@ -6,93 +6,71 @@ package com.funstill.netty.chat.protobuf;
 public final class AuthMsg {
   private AuthMsg() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+          com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+          com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+            (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface ContentOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Content)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:Content)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string token = 1;</code>
+     * <code>string uid = 1;</code>
      */
-    String getToken();
+    java.lang.String getUid();
     /**
-     * <code>string token = 1;</code>
+     * <code>string uid = 1;</code>
      */
     com.google.protobuf.ByteString
-        getTokenBytes();
+    getUidBytes();
 
     /**
-     * <code>string username = 2;</code>
+     * <code>string extra = 2;</code>
      */
-    String getUsername();
+    java.lang.String getExtra();
     /**
-     * <code>string username = 2;</code>
+     * <code>string extra = 2;</code>
      */
     com.google.protobuf.ByteString
-        getUsernameBytes();
-
-    /**
-     * <code>string password = 3;</code>
-     */
-    String getPassword();
-    /**
-     * <code>string password = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getPasswordBytes();
-
-    /**
-     * <code>string extra = 4;</code>
-     */
-    String getExtra();
-    /**
-     * <code>string extra = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getExtraBytes();
+    getExtraBytes();
   }
   /**
    * Protobuf type {@code Content}
    */
   public  static final class Content extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:Content)
-      ContentOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:Content)
+          ContentOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Content.newBuilder() to construct.
     private Content(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private Content() {
-      token_ = "";
-      username_ = "";
-      password_ = "";
+      uid_ = "";
       extra_ = "";
     }
 
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private Content(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new NullPointerException();
+        throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -103,31 +81,19 @@ public final class AuthMsg {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
-              token_ = s;
+              uid_ = s;
               break;
             }
             case 18: {
-              String s = input.readStringRequireUtf8();
-
-              username_ = s;
-              break;
-            }
-            case 26: {
-              String s = input.readStringRequireUtf8();
-
-              password_ = s;
-              break;
-            }
-            case 34: {
-              String s = input.readStringRequireUtf8();
+              java.lang.String s = input.readStringRequireUtf8();
 
               extra_ = s;
               break;
@@ -138,153 +104,85 @@ public final class AuthMsg {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return AuthMsg.internal_static_Content_descriptor;
+    getDescriptor() {
+      return com.funstill.netty.chat.protobuf.AuthMsg.internal_static_Content_descriptor;
     }
 
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return AuthMsg.internal_static_Content_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              Content.class, Builder.class);
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return com.funstill.netty.chat.protobuf.AuthMsg.internal_static_Content_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      com.funstill.netty.chat.protobuf.AuthMsg.Content.class, com.funstill.netty.chat.protobuf.AuthMsg.Content.Builder.class);
     }
 
-    public static final int TOKEN_FIELD_NUMBER = 1;
-    private volatile Object token_;
+    public static final int UID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object uid_;
     /**
-     * <code>string token = 1;</code>
+     * <code>string uid = 1;</code>
      */
-    public String getToken() {
-      Object ref = token_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getUid() {
+      java.lang.Object ref = uid_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        token_ = s;
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        uid_ = s;
         return s;
       }
     }
     /**
-     * <code>string token = 1;</code>
+     * <code>string uid = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getTokenBytes() {
-      Object ref = token_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        token_ = b;
+    getUidBytes() {
+      java.lang.Object ref = uid_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (java.lang.String) ref);
+        uid_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int USERNAME_FIELD_NUMBER = 2;
-    private volatile Object username_;
+    public static final int EXTRA_FIELD_NUMBER = 2;
+    private volatile java.lang.Object extra_;
     /**
-     * <code>string username = 2;</code>
+     * <code>string extra = 2;</code>
      */
-    public String getUsername() {
-      Object ref = username_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getExtra() {
+      java.lang.Object ref = extra_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        username_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string username = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getUsernameBytes() {
-      Object ref = username_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        username_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int PASSWORD_FIELD_NUMBER = 3;
-    private volatile Object password_;
-    /**
-     * <code>string password = 3;</code>
-     */
-    public String getPassword() {
-      Object ref = password_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        password_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string password = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPasswordBytes() {
-      Object ref = password_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        password_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int EXTRA_FIELD_NUMBER = 4;
-    private volatile Object extra_;
-    /**
-     * <code>string extra = 4;</code>
-     */
-    public String getExtra() {
-      Object ref = extra_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
         extra_ = s;
         return s;
       }
     }
     /**
-     * <code>string extra = 4;</code>
+     * <code>string extra = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getExtraBytes() {
-      Object ref = extra_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+    getExtraBytes() {
+      java.lang.Object ref = extra_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                        (java.lang.String) ref);
         extra_ = b;
         return b;
       } else {
@@ -303,18 +201,12 @@ public final class AuthMsg {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (!getTokenBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, token_);
-      }
-      if (!getUsernameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, username_);
-      }
-      if (!getPasswordBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, password_);
+            throws java.io.IOException {
+      if (!getUidBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, uid_);
       }
       if (!getExtraBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, extra_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, extra_);
       }
       unknownFields.writeTo(output);
     }
@@ -324,59 +216,45 @@ public final class AuthMsg {
       if (size != -1) return size;
 
       size = 0;
-      if (!getTokenBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, token_);
-      }
-      if (!getUsernameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, username_);
-      }
-      if (!getPasswordBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, password_);
+      if (!getUidBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, uid_);
       }
       if (!getExtraBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, extra_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, extra_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
-      if (!(obj instanceof Content)) {
+      if (!(obj instanceof com.funstill.netty.chat.protobuf.AuthMsg.Content)) {
         return super.equals(obj);
       }
-      Content other = (Content) obj;
+      com.funstill.netty.chat.protobuf.AuthMsg.Content other = (com.funstill.netty.chat.protobuf.AuthMsg.Content) obj;
 
       boolean result = true;
-      result = result && getToken()
-          .equals(other.getToken());
-      result = result && getUsername()
-          .equals(other.getUsername());
-      result = result && getPassword()
-          .equals(other.getPassword());
+      result = result && getUid()
+              .equals(other.getUid());
       result = result && getExtra()
-          .equals(other.getExtra());
+              .equals(other.getExtra());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
 
-    @Override
+    @java.lang.Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
-      hash = (53 * hash) + getToken().hashCode();
-      hash = (37 * hash) + USERNAME_FIELD_NUMBER;
-      hash = (53 * hash) + getUsername().hashCode();
-      hash = (37 * hash) + PASSWORD_FIELD_NUMBER;
-      hash = (53 * hash) + getPassword().hashCode();
+      hash = (37 * hash) + UID_FIELD_NUMBER;
+      hash = (53 * hash) + getUid().hashCode();
       hash = (37 * hash) + EXTRA_FIELD_NUMBER;
       hash = (53 * hash) + getExtra().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -384,91 +262,91 @@ public final class AuthMsg {
       return hash;
     }
 
-    public static Content parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Content parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Content parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Content parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Content parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static Content parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static Content parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
-    public static Content parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Content parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
-    public static Content parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static Content parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
-    public static Content parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(Content prototype) {
+    public static Builder newBuilder(com.funstill.netty.chat.protobuf.AuthMsg.Content prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -476,19 +354,19 @@ public final class AuthMsg {
      * Protobuf type {@code Content}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:Content)
-        ContentOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:Content)
+            com.funstill.netty.chat.protobuf.AuthMsg.ContentOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return AuthMsg.internal_static_Content_descriptor;
+      getDescriptor() {
+        return com.funstill.netty.chat.protobuf.AuthMsg.internal_static_Content_descriptor;
       }
 
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return AuthMsg.internal_static_Content_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                Content.class, Builder.class);
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return com.funstill.netty.chat.protobuf.AuthMsg.internal_static_Content_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        com.funstill.netty.chat.protobuf.AuthMsg.Content.class, com.funstill.netty.chat.protobuf.AuthMsg.Content.Builder.class);
       }
 
       // Construct using com.funstill.netty.chat.protobuf.AuthMsg.Content.newBuilder()
@@ -497,7 +375,7 @@ public final class AuthMsg {
       }
 
       private Builder(
-          BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -508,11 +386,7 @@ public final class AuthMsg {
       }
       public Builder clear() {
         super.clear();
-        token_ = "";
-
-        username_ = "";
-
-        password_ = "";
+        uid_ = "";
 
         extra_ = "";
 
@@ -520,27 +394,25 @@ public final class AuthMsg {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return AuthMsg.internal_static_Content_descriptor;
+      getDescriptorForType() {
+        return com.funstill.netty.chat.protobuf.AuthMsg.internal_static_Content_descriptor;
       }
 
-      public Content getDefaultInstanceForType() {
-        return Content.getDefaultInstance();
+      public com.funstill.netty.chat.protobuf.AuthMsg.Content getDefaultInstanceForType() {
+        return com.funstill.netty.chat.protobuf.AuthMsg.Content.getDefaultInstance();
       }
 
-      public Content build() {
-        Content result = buildPartial();
+      public com.funstill.netty.chat.protobuf.AuthMsg.Content build() {
+        com.funstill.netty.chat.protobuf.AuthMsg.Content result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public Content buildPartial() {
-        Content result = new Content(this);
-        result.token_ = token_;
-        result.username_ = username_;
-        result.password_ = password_;
+      public com.funstill.netty.chat.protobuf.AuthMsg.Content buildPartial() {
+        com.funstill.netty.chat.protobuf.AuthMsg.Content result = new com.funstill.netty.chat.protobuf.AuthMsg.Content(this);
+        result.uid_ = uid_;
         result.extra_ = extra_;
         onBuilt();
         return result;
@@ -550,49 +422,41 @@ public final class AuthMsg {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof Content) {
-          return mergeFrom((Content)other);
+        if (other instanceof com.funstill.netty.chat.protobuf.AuthMsg.Content) {
+          return mergeFrom((com.funstill.netty.chat.protobuf.AuthMsg.Content)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(Content other) {
-        if (other == Content.getDefaultInstance()) return this;
-        if (!other.getToken().isEmpty()) {
-          token_ = other.token_;
-          onChanged();
-        }
-        if (!other.getUsername().isEmpty()) {
-          username_ = other.username_;
-          onChanged();
-        }
-        if (!other.getPassword().isEmpty()) {
-          password_ = other.password_;
+      public Builder mergeFrom(com.funstill.netty.chat.protobuf.AuthMsg.Content other) {
+        if (other == com.funstill.netty.chat.protobuf.AuthMsg.Content.getDefaultInstance()) return this;
+        if (!other.getUid().isEmpty()) {
+          uid_ = other.uid_;
           onChanged();
         }
         if (!other.getExtra().isEmpty()) {
@@ -609,14 +473,14 @@ public final class AuthMsg {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        Content parsedMessage = null;
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        com.funstill.netty.chat.protobuf.AuthMsg.Content parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (Content) e.getUnfinishedMessage();
+          parsedMessage = (com.funstill.netty.chat.protobuf.AuthMsg.Content) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -626,239 +490,101 @@ public final class AuthMsg {
         return this;
       }
 
-      private Object token_ = "";
+      private java.lang.Object uid_ = "";
       /**
-       * <code>string token = 1;</code>
+       * <code>string uid = 1;</code>
        */
-      public String getToken() {
-        Object ref = token_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getUid() {
+        java.lang.Object ref = uid_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          token_ = s;
+                  (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          uid_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string token = 1;</code>
+       * <code>string uid = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getTokenBytes() {
-        Object ref = token_;
+      getUidBytes() {
+        java.lang.Object ref = uid_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          token_ = b;
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (java.lang.String) ref);
+          uid_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string token = 1;</code>
+       * <code>string uid = 1;</code>
        */
-      public Builder setToken(
-          String value) {
+      public Builder setUid(
+              java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        token_ = value;
+          throw new NullPointerException();
+        }
+
+        uid_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string token = 1;</code>
+       * <code>string uid = 1;</code>
        */
-      public Builder clearToken() {
-        
-        token_ = getDefaultInstance().getToken();
+      public Builder clearUid() {
+
+        uid_ = getDefaultInstance().getUid();
         onChanged();
         return this;
       }
       /**
-       * <code>string token = 1;</code>
+       * <code>string uid = 1;</code>
        */
-      public Builder setTokenBytes(
-          com.google.protobuf.ByteString value) {
+      public Builder setUidBytes(
+              com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        token_ = value;
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        uid_ = value;
         onChanged();
         return this;
       }
 
-      private Object username_ = "";
+      private java.lang.Object extra_ = "";
       /**
-       * <code>string username = 2;</code>
+       * <code>string extra = 2;</code>
        */
-      public String getUsername() {
-        Object ref = username_;
-        if (!(ref instanceof String)) {
+      public java.lang.String getExtra() {
+        java.lang.Object ref = extra_;
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          username_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>string username = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getUsernameBytes() {
-        Object ref = username_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          username_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string username = 2;</code>
-       */
-      public Builder setUsername(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        username_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string username = 2;</code>
-       */
-      public Builder clearUsername() {
-        
-        username_ = getDefaultInstance().getUsername();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string username = 2;</code>
-       */
-      public Builder setUsernameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        username_ = value;
-        onChanged();
-        return this;
-      }
-
-      private Object password_ = "";
-      /**
-       * <code>string password = 3;</code>
-       */
-      public String getPassword() {
-        Object ref = password_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          password_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>string password = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getPasswordBytes() {
-        Object ref = password_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          password_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string password = 3;</code>
-       */
-      public Builder setPassword(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        password_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string password = 3;</code>
-       */
-      public Builder clearPassword() {
-        
-        password_ = getDefaultInstance().getPassword();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string password = 3;</code>
-       */
-      public Builder setPasswordBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        password_ = value;
-        onChanged();
-        return this;
-      }
-
-      private Object extra_ = "";
-      /**
-       * <code>string extra = 4;</code>
-       */
-      public String getExtra() {
-        Object ref = extra_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
+                  (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
           extra_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string extra = 4;</code>
+       * <code>string extra = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getExtraBytes() {
-        Object ref = extra_;
+      getExtraBytes() {
+        java.lang.Object ref = extra_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+          com.google.protobuf.ByteString b =
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                          (java.lang.String) ref);
           extra_ = b;
           return b;
         } else {
@@ -866,48 +592,48 @@ public final class AuthMsg {
         }
       }
       /**
-       * <code>string extra = 4;</code>
+       * <code>string extra = 2;</code>
        */
       public Builder setExtra(
-          String value) {
+              java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         extra_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string extra = 4;</code>
+       * <code>string extra = 2;</code>
        */
       public Builder clearExtra() {
-        
+
         extra_ = getDefaultInstance().getExtra();
         onChanged();
         return this;
       }
       /**
-       * <code>string extra = 4;</code>
+       * <code>string extra = 2;</code>
        */
       public Builder setExtraBytes(
-          com.google.protobuf.ByteString value) {
+              com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
         extra_ = value;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -916,21 +642,21 @@ public final class AuthMsg {
     }
 
     // @@protoc_insertion_point(class_scope:Content)
-    private static final Content DEFAULT_INSTANCE;
+    private static final com.funstill.netty.chat.protobuf.AuthMsg.Content DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new Content();
+      DEFAULT_INSTANCE = new com.funstill.netty.chat.protobuf.AuthMsg.Content();
     }
 
-    public static Content getDefaultInstance() {
+    public static com.funstill.netty.chat.protobuf.AuthMsg.Content getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Content>
-        PARSER = new com.google.protobuf.AbstractParser<Content>() {
+            PARSER = new com.google.protobuf.AbstractParser<Content>() {
       public Content parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
         return new Content(input, extensionRegistry);
       }
     };
@@ -939,54 +665,53 @@ public final class AuthMsg {
       return PARSER;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Content> getParserForType() {
       return PARSER;
     }
 
-    public Content getDefaultInstanceForType() {
+    public com.funstill.netty.chat.protobuf.AuthMsg.Content getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Content_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Content_fieldAccessorTable;
+          internal_static_Content_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_Content_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
   private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+          descriptor;
   static {
-    String[] descriptorData = {
-      "\n\rAuthMsg.proto\"K\n\007Content\022\r\n\005token\030\001 \001(" +
-      "\t\022\020\n\010username\030\002 \001(\t\022\020\n\010password\030\003 \001(\t\022\r\n" +
-      "\005extra\030\004 \001(\tB\"\n com.funstill.netty.chat." +
-      "protobufb\006proto3"
+    java.lang.String[] descriptorData = {
+            "\n\rAuthMsg.proto\"%\n\007Content\022\013\n\003uid\030\001 \001(\t\022" +
+                    "\r\n\005extra\030\002 \001(\tB\"\n com.funstill.netty.cha" +
+                    "t.protobufb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+            new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+              public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                      com.google.protobuf.Descriptors.FileDescriptor root) {
+                descriptor = root;
+                return null;
+              }
+            };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[] {
+                    }, assigner);
     internal_static_Content_descriptor =
-      getDescriptor().getMessageTypes().get(0);
+            getDescriptor().getMessageTypes().get(0);
     internal_static_Content_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Content_descriptor,
-        new String[] { "Token", "Username", "Password", "Extra", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Content_descriptor,
+            new java.lang.String[] { "Uid", "Extra", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

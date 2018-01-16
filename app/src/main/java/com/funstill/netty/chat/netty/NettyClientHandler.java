@@ -1,12 +1,15 @@
 package com.funstill.netty.chat.netty;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.funstill.netty.chat.config.StoreConst;
 import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
 import com.funstill.netty.chat.observer.ProtoMsgObservable;
 import com.funstill.netty.chat.observer.ProtoMsgObserverImpl;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
+import com.funstill.netty.chat.utils.AccountStoreUtil;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,6 +35,13 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         channel = ctx.channel();
+        String userId=AccountStoreUtil.get(StoreConst.LOGIN_USER_ID);
+        if(!TextUtils.isEmpty(userId)){
+            //上线请求
+            ProtoMsg.Content.Builder msgBuilder=ProtoMsg.Content.newBuilder();
+            msgBuilder.setProtoType(ProtoTypeEnum.ONLINE_REQUEST_MSG.getIndex());
+            channel.writeAndFlush(msgBuilder.build());
+        }
         Log.d(TAG, "Android客户端连接,设备=" + Build.MODEL + ",SERIAL=" + Build.SERIAL);
     }
 
