@@ -7,6 +7,7 @@ import com.funstill.generator.greendao.dao.DaoMaster;
 import com.funstill.generator.greendao.dao.DaoMaster.DevOpenHelper;
 import com.funstill.generator.greendao.dao.DaoSession;
 import com.funstill.netty.chat.netty.NettyClientStarter;
+import com.funstill.netty.chat.utils.AccountStoreUtil;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -23,6 +24,7 @@ public class NettyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
+        new AccountStoreUtil(this);//初始化mPreferences
         NettyClientStarter.getInstance().threadRun();
         initDao();
 

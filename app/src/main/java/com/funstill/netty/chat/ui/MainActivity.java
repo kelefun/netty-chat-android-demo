@@ -15,8 +15,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AccountStoreUtil accountStoreUtil= new AccountStoreUtil(this);
-        String userId=accountStoreUtil.get(StoreConst.LOGIN_USER_ID);
+        String userId=AccountStoreUtil.get(StoreConst.LOGIN_USER_ID);
         if (!TextUtils.isEmpty(userId)) {
             DefaultMessagesActivity.senderId=userId;
             DefaultDialogsActivity.open(MainActivity.this);

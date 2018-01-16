@@ -182,10 +182,7 @@ public class LoginActivity extends FragmentActivity {
 
             }
         });
-
-        AccountStoreUtil account=new AccountStoreUtil(this);
-        String username = account.get(StoreConst.LOGIN_USERNAME);
-
+        String username = AccountStoreUtil.get(StoreConst.LOGIN_USERNAME);
         if (!TextUtils.isEmpty(username)) {
             mUsernameEdit.setText(username);
         }

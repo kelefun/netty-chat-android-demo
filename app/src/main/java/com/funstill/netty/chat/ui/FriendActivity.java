@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,7 @@ import retrofit2.Response;
  */
 
 public class FriendActivity extends AppCompatActivity {
+    private final String TAG="FriendActivity";
     public static void open(Context context) {
         context.startActivity(new Intent(context, FriendActivity.class));
     }
@@ -84,7 +86,7 @@ public class FriendActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ChatFriend>> call, Throwable t) {
-
+                Log.e(TAG,"请求好友列表失败"+t.getMessage());
             }
         });
 

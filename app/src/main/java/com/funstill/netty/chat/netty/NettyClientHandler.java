@@ -8,6 +8,7 @@ import com.funstill.netty.chat.config.StoreConst;
 import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
 import com.funstill.netty.chat.observer.ProtoMsgObservable;
 import com.funstill.netty.chat.observer.ProtoMsgObserverImpl;
+import com.funstill.netty.chat.protobuf.AuthMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 import com.funstill.netty.chat.utils.AccountStoreUtil;
 
@@ -40,6 +41,10 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
             //上线请求
             ProtoMsg.Content.Builder msgBuilder=ProtoMsg.Content.newBuilder();
             msgBuilder.setProtoType(ProtoTypeEnum.ONLINE_REQUEST_MSG.getIndex());
+            AuthMsg.Content.Builder authMsgBuilder=AuthMsg.Content.newBuilder();
+            authMsgBuilder.setUid(userId);
+            authMsgBuilder.setExtra(Build.MODEL + "," + Build.SERIAL);
+            msgBuilder.setContent(authMsgBuilder.build().toByteString());
             channel.writeAndFlush(msgBuilder.build());
         }
         Log.d(TAG, "Android客户端连接,设备=" + Build.MODEL + ",SERIAL=" + Build.SERIAL);

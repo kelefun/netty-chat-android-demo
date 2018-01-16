@@ -7,7 +7,7 @@ import com.funstill.netty.chat.protobuf.ProtoMsg;
 import io.netty.channel.Channel;
 
 /**
- * 通用处理
+ * 默认处理
  * @author liukaiyang
  * @date 2017/12/6 20:16
  */
