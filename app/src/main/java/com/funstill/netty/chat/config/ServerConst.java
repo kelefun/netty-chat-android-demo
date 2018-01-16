@@ -4,7 +4,7 @@ package com.funstill.netty.chat.config;
  * Created by liukaiyang on 2017/12/29.
  */
 
-public interface ServerConfig {
+public interface ServerConst {
     String NETTY_HOST="192.168.1.83";
     int NETTY_PORT=8089;
 

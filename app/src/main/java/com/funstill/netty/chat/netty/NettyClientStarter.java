@@ -2,7 +2,7 @@ package com.funstill.netty.chat.netty;
 
 import android.util.Log;
 
-import com.funstill.netty.chat.config.ServerConfig;
+import com.funstill.netty.chat.config.ServerConst;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
 
 import java.util.concurrent.TimeUnit;
@@ -46,7 +46,7 @@ public class NettyClientStarter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                connect(ServerConfig.NETTY_PORT, ServerConfig.NETTY_HOST);
+                connect(ServerConst.NETTY_PORT, ServerConst.NETTY_HOST);
             }
         }).start();
     }

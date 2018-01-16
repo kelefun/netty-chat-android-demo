@@ -50,7 +50,7 @@
 
 
                 <com.funstill.netty.chat.widget.ClearWriteEditText
-                    android:id="@+id/de_login_phone"
+                    android:id="@+id/de_login_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rc_ed_public_service_search_selector"
@@ -66,7 +66,7 @@
                     android:id="@+id/fr_username_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/de_login_phone"
+                    android:layout_alignRight="@+id/de_login_username"
                     android:layout_centerVertical="true"
                     android:visibility="gone">
 

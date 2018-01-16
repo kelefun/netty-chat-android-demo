@@ -17,7 +17,7 @@ import com.funstill.generator.greendao.entity.DialogData;
 import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.generator.greendao.entity.UserData;
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.config.Const;
+import com.funstill.netty.chat.config.StoreConst;
 import com.funstill.netty.chat.fixtures.MessagesFixtures;
 import com.funstill.netty.chat.model.User;
 import com.funstill.netty.chat.model.chat.ChatMessage;
@@ -180,9 +180,9 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     public boolean onSubmit(CharSequence input) {
         //查询当前登录用户信息
         User user = new User();
-        user.setAvatar(sp.getString(Const.LOGIN_AVATAR, ""));
-        user.setName(sp.getString(Const.LOGIN_NICKNAME, ""));
-        user.setId(sp.getString(Const.LOGIN_USER_ID, ""));
+        user.setAvatar(sp.getString(StoreConst.LOGIN_AVATAR, ""));
+        user.setName(sp.getString(StoreConst.LOGIN_NICKNAME, ""));
+        user.setId(sp.getString(StoreConst.LOGIN_USER_ID, ""));
         ChatMessage msg = new ChatMessage("", user, input.toString(), new Date());
         //将自己发送的消息展示到对话框
         super.messagesAdapter.addToStart(msg, true);

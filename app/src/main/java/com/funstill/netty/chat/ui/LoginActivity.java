@@ -3,7 +3,6 @@ package com.funstill.netty.chat.ui;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.funstill.netty.chat.R;
-import com.funstill.netty.chat.config.Const;
+import com.funstill.netty.chat.config.StoreConst;
 import com.funstill.netty.chat.model.enums.ProtoTypeEnum;
 import com.funstill.netty.chat.model.enums.ResponseEnum;
 import com.funstill.netty.chat.netty.NettyClientHandler;
@@ -30,11 +29,15 @@ import com.funstill.netty.chat.permission.annotation.OnMPermissionNeverAskAgain;
 import com.funstill.netty.chat.protobuf.AuthMsg;
 import com.funstill.netty.chat.protobuf.AuthResponseMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
+import com.funstill.netty.chat.utils.AccountStoreUtil;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.funstill.netty.chat.widget.ClearWriteEditText;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.protobuf.InvalidProtocolBufferException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.netty.channel.Channel;
 
@@ -46,9 +49,7 @@ public class LoginActivity extends FragmentActivity {
     private ProtoMsgObserver loginObserver = null;
 
     private ImageView mImg_Background;
-    private ClearWriteEditText mPhoneEdit, mPasswordEdit;
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
+    private ClearWriteEditText mUsernameEdit, mPasswordEdit;
 
     public static void start(Context context) {
         start(context, false);
@@ -65,8 +66,6 @@ public class LoginActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        sp = getSharedPreferences("config", MODE_PRIVATE);
-        editor = sp.edit();
         requestBasicPermission();
         initView();
         initObserver();
@@ -107,11 +106,12 @@ public class LoginActivity extends FragmentActivity {
 
     private void saveMyInfo(String userJson) {
         JsonObject returnData = new JsonParser().parse(userJson).getAsJsonObject();
-        editor.putString(Const.LOGIN_USERNAME, mPhoneEdit.getText().toString());
-        editor.putString(Const.LOGIN_USER_ID, returnData.get("userId").toString());
-        editor.putString(Const.LOGIN_AVATAR, returnData.get("avatar").toString());
-        editor.putString(Const.LOGIN_NICKNAME, returnData.get("nickname").toString());
-        editor.commit();
+        Map<String,String> params=new HashMap<>();
+        params.put(StoreConst.LOGIN_USERNAME, mUsernameEdit.getText().toString());
+        params.put(StoreConst.LOGIN_USER_ID, returnData.get("userId").toString());
+        params.put(StoreConst.LOGIN_AVATAR, returnData.get("avatar").toString());
+        params.put(StoreConst.LOGIN_NICKNAME, returnData.get("nickname").toString());
+        AccountStoreUtil.put(params);
     }
 
     @Override
@@ -122,17 +122,17 @@ public class LoginActivity extends FragmentActivity {
     }
 
     private void initView() {
-        mPhoneEdit = (ClearWriteEditText) findViewById(R.id.de_login_phone);
+        mUsernameEdit = (ClearWriteEditText) findViewById(R.id.de_login_username);
         mPasswordEdit = (ClearWriteEditText) findViewById(R.id.de_login_password);
         Button mConfirm = (Button) findViewById(R.id.de_login_sign);
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String phoneString = mPhoneEdit.getText().toString().trim();
+                String phoneString = mUsernameEdit.getText().toString().trim();
                 String passwordString = mPasswordEdit.getText().toString().trim();
                 if (TextUtils.isEmpty(phoneString)) {
                     AppUtils.showToast(LoginActivity.this, "账号不能为空", false);
-                    mPhoneEdit.setShakeAnimation();
+                    mUsernameEdit.setShakeAnimation();
                     return;
                 }
 
@@ -143,7 +143,7 @@ public class LoginActivity extends FragmentActivity {
                 }
                 //发送登录消息
                 AuthMsg.Content.Builder authBuilder = AuthMsg.Content.newBuilder();
-                authBuilder.setUsername(mPhoneEdit.getText().toString());
+                authBuilder.setUsername(mUsernameEdit.getText().toString());
                 authBuilder.setPassword(mPasswordEdit.getText().toString());
                 ProtoMsg.Content.Builder msgBuilder = ProtoMsg.Content.newBuilder();
                 msgBuilder.setProtoType(ProtoTypeEnum.LOGIN_REQUEST_MSG.getIndex());
@@ -165,7 +165,7 @@ public class LoginActivity extends FragmentActivity {
                 mImg_Background.startAnimation(animation);
             }
         }, 1000);
-        mPhoneEdit.addTextChangedListener(new TextWatcher() {
+        mUsernameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -174,7 +174,7 @@ public class LoginActivity extends FragmentActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 11) {
-                    AppUtils.onInactive(getApplicationContext(), mPhoneEdit);
+                    AppUtils.onInactive(getApplicationContext(), mUsernameEdit);
                 }
             }
 
@@ -184,10 +184,11 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        String oldPhone = sp.getString(Const.LOGIN_USERNAME, "");
+        AccountStoreUtil account=new AccountStoreUtil(this);
+        String username = account.get(StoreConst.LOGIN_USERNAME);
 
-        if (!TextUtils.isEmpty(oldPhone)) {
-            mPhoneEdit.setText(oldPhone);
+        if (!TextUtils.isEmpty(username)) {
+            mUsernameEdit.setText(username);
         }
     }
 

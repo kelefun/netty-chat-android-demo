@@ -19,7 +19,7 @@ import com.funstill.generator.greendao.entity.MessageData;
 import com.funstill.netty.chat.R;
 import com.funstill.netty.chat.adapter.FriendRecyclerAdapter;
 import com.funstill.netty.chat.api.FriendApi;
-import com.funstill.netty.chat.config.ServerConfig;
+import com.funstill.netty.chat.config.ServerConst;
 import com.funstill.netty.chat.model.chat.ChatFriend;
 import com.funstill.netty.chat.model.enums.DialogTypeEnum;
 import com.funstill.netty.chat.utils.AppUtils;
@@ -73,7 +73,7 @@ public class FriendActivity extends AppCompatActivity {
         parameters.clear();
         parameters.put("userId", DefaultMessagesActivity.senderId);
         headers.put("Accept", "application/json");
-        FriendApi friendApi = RetrofitUtil.retrofit(ServerConfig.WEB_URL).create(FriendApi.class);
+        FriendApi friendApi = RetrofitUtil.retrofit(ServerConst.WEB_URL).create(FriendApi.class);
         Call<List<ChatFriend>> call = friendApi.getFriendList(parameters);
         call.enqueue(new Callback<List<ChatFriend>>() {
             @Override
