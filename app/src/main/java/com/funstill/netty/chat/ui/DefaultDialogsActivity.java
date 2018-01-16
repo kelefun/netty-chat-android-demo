@@ -100,12 +100,14 @@ public class DefaultDialogsActivity extends BaseDialogsActivity {
                     .where(MessageDataDao.Properties.DialogId.eq(dialogData.getId()))
                     .orderDesc(MessageDataDao.Properties.CreateDate).limit(1)
                     .build().unique();
-            ChatMessage chatMessage= new ChatMessage();
-            chatMessage.setCreatedAt(messageData.getCreateDate());
-            chatMessage.setText(messageData.getContent());
-            chatDialog.setLastMessage(chatMessage);
-            chatDialog.setUnreadCount(3);
-            dialogList.add(chatDialog);
+            if(messageData!=null){
+                ChatMessage chatMessage= new ChatMessage();
+                chatMessage.setCreatedAt(messageData.getCreateDate());
+                chatMessage.setText(messageData.getContent());
+                chatDialog.setLastMessage(chatMessage);
+                chatDialog.setUnreadCount(3);
+                dialogList.add(chatDialog);
+            }
 
         }
 

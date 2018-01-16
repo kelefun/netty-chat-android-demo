@@ -2,7 +2,6 @@ package com.funstill.netty.chat.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +27,7 @@ import com.funstill.netty.chat.netty.NettyClientHandler;
 import com.funstill.netty.chat.observer.ProtoMsgObserver;
 import com.funstill.netty.chat.protobuf.CommonMsg;
 import com.funstill.netty.chat.protobuf.ProtoMsg;
+import com.funstill.netty.chat.utils.AccountStoreUtil;
 import com.funstill.netty.chat.utils.AppUtils;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -42,11 +42,10 @@ import io.netty.channel.Channel;
 public class DefaultMessagesActivity extends BaseMessagesActivity
         implements MessageInput.InputListener,
         MessageInput.AttachmentsListener {
-    private SharedPreferences sp;
     private final String TAG = "DefaultMessagesActivity";
     private final int RECEIVE_MSG = 1, pageSize = 8;
     private static Long dialogId_, friendUserId_;
-    private boolean loadmore = true;
+    private boolean loadMore = true;
 
     private ProtoMsgObserver commonMsgObserver = null;
     private MessagesList messagesList;
@@ -64,7 +63,6 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_messages);
-        sp = getSharedPreferences("config", MODE_PRIVATE);
         this.messagesList = (MessagesList) findViewById(R.id.messagesList);
         initAdapter();
         initObserver();
@@ -180,9 +178,9 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
     public boolean onSubmit(CharSequence input) {
         //查询当前登录用户信息
         User user = new User();
-        user.setAvatar(sp.getString(StoreConst.LOGIN_AVATAR, ""));
-        user.setName(sp.getString(StoreConst.LOGIN_NICKNAME, ""));
-        user.setId(sp.getString(StoreConst.LOGIN_USER_ID, ""));
+        user.setAvatar(AccountStoreUtil.get(StoreConst.LOGIN_AVATAR));
+        user.setName(AccountStoreUtil.get(StoreConst.LOGIN_NICKNAME));
+        user.setId(AccountStoreUtil.get(StoreConst.LOGIN_USER_ID));
         ChatMessage msg = new ChatMessage("", user, input.toString(), new Date());
         //将自己发送的消息展示到对话框
         super.messagesAdapter.addToStart(msg, true);
@@ -229,14 +227,14 @@ public class DefaultMessagesActivity extends BaseMessagesActivity
 
     private void loadHistory(int page) {
 
-        if (loadmore && dialogId_ != null) {
+        if (loadMore && dialogId_ != null) {
             DaoSession daoSession = ((NettyApplication) getApplication()).getDaoSession();
             MessageDataDao messageDataDao = daoSession.getMessageDataDao();
             List<MessageData> messageDataList = messageDataDao.queryBuilder()
                     .where(MessageDataDao.Properties.DialogId.eq(dialogId_))
                     .orderDesc(MessageDataDao.Properties.UpdateDate).limit(pageSize).offset((page - 1) * pageSize).list();
 
-            loadmore = messageDataList.size() == pageSize;
+            loadMore = messageDataList.size() == pageSize;
             if (messageDataList.size() > 0) {
                 ArrayList<ChatMessage> messages = new ArrayList<>(messageDataList.size());
                 for (MessageData messageData : messageDataList) {
